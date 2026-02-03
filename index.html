@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>CHAOS DASHBOARD</title>
+</head>
+<body style="margin:0;padding:0;background:#050505;color:#e0e0e0;font-family:-apple-system, sans-serif;">
+
+<style>
+/* CORE VARIABLES */
+:root { --red:#ff2a2a; --green:#0aff0a; --blue:#00f3ff; --yellow:#f5e625; --bg:#050505; }
+.container { max-width: 600px; margin: 0 auto; padding: 15px; }
+
+/* HEADER */
+.top-bar { display: flex; justify-content: space-between; border-bottom: 1px solid #222; padding-bottom: 10px; margin-bottom: 20px; font-size: 0.7rem; color: #777; letter-spacing: 1px; }
+.logo-area { text-align: center; margin-bottom: 25px; }
+.logo { font-size: 2rem; font-weight: 900; color: #fff; letter-spacing: -1px; display: inline-block; border: 2px solid #fff; padding: 5px 15px; }
+.logo-sub { font-size: 0.65rem; color: var(--green); letter-spacing: 2px; text-transform: uppercase; margin-top: 8px; }
+
+/* 📸 HERO SECTION (The "Thumbnail") */
+.hero-card { 
+    position: relative; height: 220px; border-radius: 8px; overflow: hidden; margin-bottom: 25px; border: 1px solid #333; 
+    box-shadow: 0 5px 20px rgba(0,0,0,0.5); text-decoration: none; display: block;
+}
+.hero-img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s; }
+.hero-overlay { 
+    position: absolute; bottom: 0; left: 0; width: 100%; 
+    background: linear-gradient(transparent, rgba(0,0,0,0.95)); 
+    padding: 20px 15px; 
+}
+.hero-src { color: var(--red); font-size: 0.65rem; font-weight: bold; text-transform: uppercase; margin-bottom: 5px; display: block; }
+.hero-title { color: #fff; font-size: 1.1rem; font-weight: 800; line-height: 1.3; text-shadow: 0 2px 4px rgba(0,0,0,0.8); }
+.hero-card:hover .hero-img { transform: scale(1.05); }
+
+/* 📊 ANALYSIS GRID (Chart + Data) */
+.analysis-grid { display: flex; gap: 15px; margin-bottom: 25px; align-items: stretch; }
+
+/* Chart Box */
+.chart-box { 
+    flex: 1; background: #111; border: 1px solid #333; border-radius: 8px; padding: 10px; 
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+}
+.chart-img { height: 90px; width: auto; filter: drop-shadow(0 0 8px rgba(255,255,255,0.1)); }
+.chart-label { margin-top: 5px; font-size: 0.7rem; color: #888; font-weight: bold; }
+
+/* Data Box */
+.data-box { 
+    flex: 1.2; background: #111; border: 1px solid #333; border-radius: 8px; padding: 15px; 
+    display: flex; flex-direction: column; justify-content: space-around; 
+}
+.data-row { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #222; padding-bottom: 8px; margin-bottom: 8px; }
+.data-row:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+.data-lbl { font-size: 0.7rem; color: #666; text-transform: uppercase; }
+.data-val { font-size: 1rem; font-weight: bold; color: #fff; }
+
+/* DECODE (Text Analysis) */
+.decode-box { background: rgba(0, 243, 255, 0.03); border-left: 3px solid var(--blue); padding: 15px; margin-bottom: 25px; border-radius: 0 4px 4px 0; }
+.decode-head { color: var(--blue); font-weight: bold; font-size: 0.7rem; margin-bottom: 10px; text-transform: uppercase; letter-spacing: 1px; }
+.decode-list { margin: 0; padding-left: 15px; color: #ccc; font-size: 0.85rem; line-height: 1.5; }
+
+/* NEWS LIST (The rest) */
+.news-list-head { font-size: 0.75rem; color: #666; margin-bottom: 10px; text-transform: uppercase; letter-spacing: 1px; border-bottom: 1px solid #222; padding-bottom: 5px; }
+.news-item { display: flex; gap: 10px; margin-bottom: 15px; text-decoration: none; }
+.news-thumb { width: 80px; height: 60px; border-radius: 4px; object-fit: cover; flex-shrink: 0; background: #222; }
+.news-info { display: flex; flex-direction: column; justify-content: center; }
+.news-h { font-size: 0.85rem; color: #ddd; font-weight: 500; line-height: 1.3; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.news-m { font-size: 0.65rem; color: #555; margin-top: 4px; }
+
+/* CTA */
+.btn-main { display: block; width: 100%; background: var(--red); color: #000; font-weight: 900; text-align: center; padding: 16px; text-decoration: none; border-radius: 6px; text-transform: uppercase; letter-spacing: 1px; transition: 0.2s; box-shadow: 0 4px 15px rgba(255, 42, 42, 0.3); }
+.btn-main:hover { background: #fff; transform: translateY(-2px); }
+
+</style>
+
+<div class="container">
+    
+    <div class="top-bar">
+        <span>LEVEL: GREEN</span>
+        <span>ID: 882-ALPHA</span>
+    </div>
+
+    <div class="logo-area">
+        <div class="logo">CHAOS</div>
+        <div class="logo-sub">Situation Room</div>
+    </div>
+
+    <a href="https://www.cbsnews.com/colorado/news/power-outages-reported-residents-across-aurora/" target="_blank" class="hero-card">
+        <img src="https://assets2.cbsnewsstatic.com/hub/i/r/2026/02/01/43f55259-a109-4e67-8938-511004456604/thumbnail/1200x630/fb6de13b8180314efbd326ab133d1537/power-outage-gadjecki-frame-8080.jpg" class="hero-img" onerror="this.src='https://images.unsplash.com/photo-1614028674026-a65e31bfd27c?w=600'">
+        <div class="hero-overlay">
+            <span class="hero-src">🔥 TOP STORY • CBS News</span>
+            <div class="hero-title">Power outages reported across southeast Denver metro area, Xcel Energy says multiple substations involved - CBS News</div>
+        </div>
+    </a>
+
+    <div class="analysis-grid">
+        <div class="chart-box">
+            <img src="https://quickchart.io/chart?c=%7B%22type%22%3A%22radialGauge%22%2C%22data%22%3A%7B%22datasets%22%3A%5B%7B%22data%22%3A%5B17%5D%2C%22backgroundColor%22%3A%22white%22%7D%5D%7D%2C%22options%22%3A%7B%22trackColor%22%3A%22rgb(40%2C40%2C40)%22%2C%22centerArea%22%3A%7B%22text%22%3A%2217%25%22%2C%22fontColor%22%3A%22white%22%2C%22fontSize%22%3A50%7D%7D%7D" class="chart-img">
+            <div class="chart-label" style="color:#0aff0a">FEAR 17</div>
+        </div>
+        <div class="data-box">
+            <div class="data-row">
+                <span class="data-lbl">Signal</span>
+                <span class="data-val" style="color:var(--yellow)">88%</span>
+            </div>
+            <div class="data-row">
+                <span class="data-lbl">Accuracy</span>
+                <span class="data-val" style="color:var(--blue)">79.1%</span>
+            </div>
+            <div class="data-row">
+                <span class="data-lbl">Users</span>
+                <span class="data-val">842</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="decode-box">
+        <div class="decode-head">🧠 Analyst Decode</div>
+        <ul class="decode-list">
+            <li>System initializing...</li><li>Scanning feeds...</li><li>Calibrating signal...</li>
+        </ul>
+    </div>
+
+    <div class="news-list-head">/// INCOMING INTELLIGENCE</div>
+    
+        <a href="https://www.bloomberg.com/news/articles/2026-02-01/oracle-to-raise-up-to-50-billion-this-year-for-cloud-investment" target="_blank" class="news-item">
+            <img src="https://assets.bwbx.io/images/users/iqjWHBFdfxIU/i_rBGJ.qi6pw/v0/1200x800.jpg" class="news-thumb" onerror="this.src='https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=100'">
+            <div class="news-info">
+                <div class="news-h">Oracle to Raise Up to $50 Billion This Year for Cloud Investment - Bloomberg</div>
+                <div class="news-m">Bloomberg • 01:50 AM</div>
+            </div>
+        </a>
+    
+        <a href="https://www.cnbc.com/2026/02/01/stock-market-today-live-updates.html" target="_blank" class="news-item">
+            <img src="https://image.cnbcfm.com/api/v1/image/108258597-17696344772026-01-28t205958z_1206079957_rc2iaja4d538_rtrmadp_0_usa-stocks.jpeg?v=1769634552&w=1920&h=1080" class="news-thumb" onerror="this.src='https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=100'">
+            <div class="news-info">
+                <div class="news-h">Stock futures fall after silver, bitcoin sell off; questions loom over AI trade: Live updates - CNBC</div>
+                <div class="news-m">CNBC • 11:30 PM</div>
+            </div>
+        </a>
+    
+        <a href="https://techcrunch.com/2026/02/01/ai-layoffs-or-ai-washing/" target="_blank" class="news-item">
+            <img src="https://images.unsplash.com/photo-1611974765270-ca1258634369?w=600" class="news-thumb" onerror="this.src='https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=100'">
+            <div class="news-info">
+                <div class="news-h">AI layoffs or ‘AI-washing’? - TechCrunch</div>
+                <div class="news-m">TechCrunch • 10:15 PM</div>
+            </div>
+        </a>
+    
+
+    <br>
+
+    <a href="https://t.me/your_channel" class="btn-main">Decrypt Full Report</a>
+
+    <div style="text-align:center; color:#333; font-size:0.6rem; margin-top:20px;">
+        CHAOS INTELLIGENCE // v12.0
+    </div>
+
+</div>
+
+</body>
+</html>
