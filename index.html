@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>CHAOS VISUAL</title>
+</head>
+<body style="margin:0;padding:0;background:#000;font-family:sans-serif;">
+
+<style>
+  :root { --red: #ff2a2a; --yellow: #f5e625; --green: #0aff0a; --bg: #000; }
+  
+  /* 1. THE HERO IMAGE (Magazine Cover Style) */
+  .hero {
+    height: 450px;
+    width: 100%;
+    background-image: url('https://image.cnbcfm.com/api/v1/image/108258597-17696344772026-01-28t205958z_1206079957_rc2iaja4d538_rtrmadp_0_usa-stocks.jpeg?v=1769634552&w=1920&h=1080');
+    background-size: cover;
+    background-position: center;
+    position: relative;
+    border-bottom: 4px solid var(--red);
+  }
+  
+  .hero-gradient {
+    position: absolute; inset: 0;
+    background: linear-gradient(to bottom, rgba(0,0,0,0.1) 50%, rgba(0,0,0,1) 100%);
+    display: flex; flex-direction: column; justify-content: flex-end;
+    padding: 20px;
+  }
+
+  /* HEADLINE DESIGN */
+  .tag { background: var(--red); color: white; font-weight: 900; padding: 5px 10px; text-transform: uppercase; font-size: 0.7rem; display: inline-block; margin-bottom: 10px; }
+  .title { color: #fff; font-size: 1.8rem; font-weight: 800; line-height: 1.1; text-shadow: 0 2px 10px rgba(0,0,0,0.9); margin-bottom: 5px; }
+  .src { color: #ccc; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 2px; }
+
+  /* 2. THE ANALYST HUD (Data Overlay) */
+  .hud {
+    display: flex; align-items: center; gap: 15px;
+    background: #111; margin: -30px 15px 20px 15px; 
+    padding: 15px; border-radius: 8px; border: 1px solid #333;
+    position: relative; z-index: 10;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+  }
+  
+  .chart-area { width: 80px; flex-shrink: 0; text-align: center; }
+  .chart-img { width: 100%; filter: drop-shadow(0 0 5px rgba(255,255,255,0.2)); }
+  .chart-lbl { font-size: 0.6rem; color: #888; text-transform: uppercase; margin-top: 5px; }
+
+  .stats-area { flex-grow: 1; border-left: 1px solid #333; padding-left: 15px; }
+  .stat-row { display: flex; justify-content: space-between; margin-bottom: 5px; }
+  .stat-lbl { color: #666; font-size: 0.7rem; text-transform: uppercase; }
+  .stat-val { color: #fff; font-weight: bold; font-size: 0.9rem; }
+
+  /* 3. INTELLIGENCE BRIEF */
+  .intel { padding: 0 20px 30px 20px; }
+  .intel-head { color: var(--yellow); font-weight: bold; font-size: 0.8rem; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 1px; }
+  .intel-text { color: #ddd; font-size: 1rem; line-height: 1.6; border-left: 2px solid var(--yellow); padding-left: 15px; }
+
+  /* BUTTON */
+  .btn { display: block; background: #fff; color: #000; text-align: center; font-weight: 900; padding: 15px; margin: 20px; text-decoration: none; text-transform: uppercase; font-size: 0.9rem; }
+
+</style>
+
+<div class="hero">
+  <div class="hero-gradient">
+    <div>
+      <span class="tag">Breaking Intelligence</span>
+      <div class="title">Stock futures fall after silver, bitcoin sell off; questions loom over AI trade: Live updates - CNBC</div>
+      <div class="src">Via CNBC</div>
+    </div>
+  </div>
+</div>
+
+<div class="hud">
+  <div class="chart-area">
+    <img src="https://quickchart.io/chart?c=%7B%22type%22%3A%22radialGauge%22%2C%22data%22%3A%7B%22datasets%22%3A%5B%7B%22data%22%3A%5B17%5D%2C%22backgroundColor%22%3A%22white%22%7D%5D%7D%2C%22options%22%3A%7B%22trackColor%22%3A%22rgb(40%2C40%2C40)%22%2C%22centerArea%22%3A%7B%22text%22%3A17%2C%22fontColor%22%3A%22white%22%2C%22fontSize%22%3A60%7D%7D%7D" class="chart-img">
+    <div class="chart-lbl" style="color:#0aff0a">Fear Index</div>
+  </div>
+  <div class="stats-area">
+    <div class="stat-row">
+      <span class="stat-lbl">System Signal</span>
+      <span class="stat-val" style="color:var(--yellow)">HOLD</span>
+    </div>
+    <div class="stat-row">
+      <span class="stat-lbl">Accuracy</span>
+      <span class="stat-val" style="color:var(--green)">79.1%</span>
+    </div>
+    <div class="stat-row">
+      <span class="stat-lbl">Active Agents</span>
+      <span class="stat-val">842</span>
+    </div>
+  </div>
+</div>
+
+<div class="intel">
+  <div class="intel-head">⚡ Global Situation Status</div>
+  <div class="intel-text">"
+The world feels restless, caught between the accelerating promise and peril of technology, simmering geopolitical tensions, and recalibrating financi..."</div>
+</div>
+
+<a href="https://t.me/your_channel" class="btn">ACCESS FULL BRIEFING</a>
+
+</body>
+</html>
