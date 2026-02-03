@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chaos Intelligence — Daily Market Briefing</title>
+<meta name="description" content="Live market intelligence. Fear Index at 17. AI Confidence 73%. 79.1% accuracy over 90 days.">
+<style>
+:root{--cream:#faf8f4;--cream-warm:#f5f2ed;--ink:#0d0d0d;--ink-light:#3d3d3d;--ink-muted:#8a8a8a;--red:#b91c1c;--red-glow:rgba(185,28,28,0.12);--green:#059669;--green-glow:rgba(5,150,105,0.12);--gold:#a16207;--gold-bright:#ca8a04;--gold-bg:rgba(202,138,4,0.08);--purple:#7c3aed;--border:#e7e5e4;--border-dark:#d6d3d1;--font-serif:'Georgia',serif;--font-sans:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;--font-mono:'SF Mono','Cascadia Code',monospace}
+*{margin:0;padding:0;box-sizing:border-box}
+html{font-size:16px;-webkit-font-smoothing:antialiased}
+body{background:#d4d0c8;font-family:var(--font-sans);color:var(--ink);line-height:1.6}
+.newspaper{max-width:680px;margin:0 auto;background:var(--cream);box-shadow:0 0 0 1px rgba(0,0,0,0.05),0 20px 40px -10px rgba(0,0,0,0.15);min-height:100vh;position:relative}
+.masthead{text-align:center;padding:28px 24px 18px;border-bottom:3px double var(--ink);background:linear-gradient(to bottom,var(--cream),var(--cream-warm))}
+.masthead-date{font-size:.72rem;text-transform:uppercase;letter-spacing:.15em;color:var(--ink-muted);margin-bottom:8px}
+.masthead h1{font-family:var(--font-serif);font-size:2.5rem;font-weight:400;letter-spacing:-.02em;color:var(--ink);margin-bottom:4px}
+.masthead-sub{font-size:.68rem;text-transform:uppercase;letter-spacing:.25em;color:var(--ink-muted)}
+.alert-bar{background:var(--red);color:#fff;padding:11px 24px;display:flex;align-items:center;justify-content:center;gap:10px;font-size:.84rem;font-weight:600;letter-spacing:.03em}
+.live-pulse{width:8px;height:8px;border-radius:50%;background:#fff;position:relative}
+.live-pulse::before{content:'';position:absolute;inset:-4px;border-radius:50%;border:2px solid #fff;animation:pulse 2s ease-out infinite}
+@keyframes pulse{0%{transform:scale(.8);opacity:1}100%{transform:scale(2);opacity:0}}
+.temporal-bar{background:var(--ink);color:rgba(255,255,255,.7);padding:10px 24px;display:flex;align-items:center;justify-content:center;gap:16px;font-size:.75rem;flex-wrap:wrap;font-family:var(--font-mono)}
+.temporal-bar .value{color:#fff;font-weight:700}
+.temporal-bar .sep{opacity:.3}
+.session-progress{width:80px;height:4px;background:rgba(255,255,255,.1);border-radius:2px;overflow:hidden}
+.session-progress .bar{height:100%;background:linear-gradient(90deg,#22d3ee,#34d399);border-radius:2px}
+.expiry-warning{color:#fbbf24;font-weight:600}
+.memory-strip{background:var(--green-glow);border-bottom:1px solid rgba(5,150,105,.2);padding:10px 24px;display:flex;align-items:center;justify-content:center;gap:14px;font-size:.8rem;flex-wrap:wrap}
+.memory-strip .check{width:18px;height:18px;border-radius:50%;background:var(--green);color:#fff;display:flex;align-items:center;justify-content:center;font-size:.7rem;font-weight:700}
+.memory-strip .outcome{color:var(--green);font-weight:700;font-family:var(--font-mono)}
+.memory-strip .meta{color:var(--ink-muted);font-size:.75rem;margin-left:auto}
+.stats-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border);border-bottom:1px solid var(--border)}
+.stat{background:var(--cream);padding:18px 12px;text-align:center}
+.stat-value{font-family:var(--font-mono);font-size:1.85rem;font-weight:700;color:var(--ink);line-height:1;display:flex;align-items:center;justify-content:center;gap:6px;margin-bottom:4px}
+.stat-delta{font-size:.78rem;font-weight:700;padding:2px 6px;border-radius:4px;font-family:var(--font-mono)}
+.stat-delta.positive{color:var(--green);background:var(--green-glow)}
+.stat-delta.negative{color:var(--red);background:var(--red-glow)}
+.stat-label{font-size:.68rem;text-transform:uppercase;letter-spacing:.1em;color:var(--ink-muted);font-weight:600;margin-bottom:3px}
+.stat-context{font-size:.73rem;color:var(--ink-muted);font-style:italic}
+.forces-panel{padding:14px 24px;background:var(--cream-warm);border-bottom:1px solid var(--border)}
+.forces-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
+.forces-title{font-size:.68rem;text-transform:uppercase;letter-spacing:.15em;color:var(--ink-muted);font-weight:700}
+.forces-count{font-size:.75rem;color:var(--red);font-weight:700;font-family:var(--font-mono)}
+.forces-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.force-pill{display:inline-flex;align-items:center;gap:5px;padding:5px 11px;border-radius:16px;font-size:.78rem;font-weight:600;cursor:pointer;transition:all .2s}
+.force-pill.inactive{background:rgba(0,0,0,.04);color:var(--ink-muted)}
+.force-pill.active{background:var(--red-glow);color:var(--red);border:1px solid rgba(185,28,28,.2)}
+.force-pill.collision{background:linear-gradient(135deg,var(--gold-bg),rgba(185,28,28,.08));color:var(--ink);border:1px solid var(--gold);font-weight:700}
+.forces-link{margin-left:auto;font-size:.73rem;color:var(--ink-muted);text-decoration:none}
+.forces-link:hover{color:var(--ink)}
+.streak-panel{background:linear-gradient(135deg,#0f172a,#1e293b);padding:14px 24px;display:flex;align-items:center;gap:14px}
+.streak-icon{width:44px;height:44px;border-radius:10px;background:linear-gradient(135deg,#f59e0b,#ef4444);display:flex;align-items:center;justify-content:center;font-size:1.4rem;box-shadow:0 4px 12px rgba(245,158,11,.3)}
+.streak-content{flex:1}
+.streak-title{color:#fff;font-size:.92rem;font-weight:700;margin-bottom:2px}
+.streak-sub{color:rgba(255,255,255,.55);font-size:.78rem;margin-bottom:6px}
+.streak-progress{height:6px;background:rgba(255,255,255,.1);border-radius:3px;overflow:hidden;max-width:180px}
+.streak-progress .bar{height:100%;background:linear-gradient(90deg,#fbbf24,#f59e0b,#ef4444);border-radius:3px}
+.streak-badge{background:rgba(251,191,36,.15);border:1px solid rgba(251,191,36,.3);color:#fbbf24;font-family:var(--font-mono);font-size:.78rem;font-weight:700;padding:6px 12px;border-radius:6px}
+.fomo-ticker{background:#f5f5f4;border-bottom:1px solid var(--border);padding:9px 0;overflow:hidden}
+.fomo-track{display:inline-flex;gap:36px;animation:ticker 22s linear infinite}
+.fomo-item{display:flex;align-items:center;gap:8px;font-size:.78rem;color:var(--ink-light);white-space:nowrap}
+.fomo-avatar{width:22px;height:22px;border-radius:50%;background:var(--border-dark);display:flex;align-items:center;justify-content:center;font-size:.8rem}
+.fomo-action{color:var(--ink);font-weight:600}
+@keyframes ticker{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+.content{padding:28px 24px}
+.section-header{display:flex;align-items:center;gap:10px;margin-bottom:14px}
+.section-label{font-size:.68rem;text-transform:uppercase;letter-spacing:.15em;color:var(--red);font-weight:700}
+.section-line{flex:1;height:1px;background:var(--border)}
+.lead-story{margin-bottom:28px}
+.lead-hed{font-family:var(--font-serif);font-size:1.55rem;font-weight:400;line-height:1.28;color:var(--ink);margin-bottom:8px}
+.lead-dek{font-size:.92rem;color:var(--ink-light);font-style:italic;margin-bottom:16px;padding-bottom:14px;border-bottom:1px solid var(--border);line-height:1.5}
+.lead-body{font-size:.98rem;color:var(--ink-light);line-height:1.8;font-family:var(--font-serif)}
+.lead-body .drop-cap{font-family:var(--font-serif);font-size:3.6rem;float:left;line-height:.85;margin-right:8px;margin-top:5px;color:var(--ink)}
+.analysis-block{margin-bottom:26px;padding-bottom:24px;border-bottom:1px solid var(--border)}
+.analysis-block:last-of-type{border-bottom:none}
+.analysis-title{font-family:var(--font-serif);font-size:1.12rem;color:var(--ink);margin-bottom:8px;font-weight:700}
+.analysis-text{font-size:.94rem;color:var(--ink-light);line-height:1.75;font-family:var(--font-serif)}
+.outlook-list{list-style:none;margin-top:20px}
+.outlook-item{display:flex;gap:14px;padding:14px 0;border-bottom:1px solid var(--border)}
+.outlook-item:last-child{border-bottom:none}
+.outlook-tag{flex-shrink:0;font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;padding:4px 10px;border-radius:4px;height:fit-content;margin-top:2px}
+.outlook-tag.regulation{background:var(--red-glow);color:var(--red)}
+.outlook-tag.capital{background:var(--gold-bg);color:var(--gold)}
+.outlook-tag.sentiment{background:rgba(124,58,237,.1);color:var(--purple)}
+.outlook-content{flex:1}
+.outlook-title{font-size:.94rem;font-weight:600;color:var(--ink);margin-bottom:3px}
+.outlook-desc{font-size:.84rem;color:var(--ink-muted);line-height:1.5}
+.chaos-line{margin:26px 0;padding:22px 24px;background:var(--gold-bg);border-left:4px solid var(--gold-bright);border-radius:0 8px 8px 0}
+.chaos-label{font-size:.68rem;text-transform:uppercase;letter-spacing:.18em;color:var(--gold);font-weight:700;margin-bottom:8px}
+.chaos-quote{font-family:var(--font-serif);font-size:1.22rem;font-style:italic;color:var(--ink);line-height:1.5;margin-bottom:14px}
+.chaos-actions{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.share-btn{display:inline-flex;align-items:center;gap:5px;padding:7px 13px;background:rgba(202,138,4,.1);border:1px solid rgba(202,138,4,.25);border-radius:5px;font-size:.78rem;font-weight:600;color:var(--gold-bright);cursor:pointer;transition:all .2s;font-family:var(--font-sans)}
+.share-btn:hover{background:rgba(202,138,4,.2)}
+.share-count{margin-left:auto;font-size:.78rem;color:var(--ink-muted);font-family:var(--font-mono)}
+.wire-section{margin-top:26px}
+.wire-item{display:flex;gap:14px;padding:14px 0;border-bottom:1px solid var(--border)}
+.wire-item:last-child{border-bottom:none}
+.wire-source{flex-shrink:0;font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--red);width:65px;padding-top:2px}
+.wire-content{flex:1;min-width:0}
+.wire-headline{font-size:.94rem;font-weight:600;color:var(--ink);line-height:1.35;margin-bottom:4px}
+.wire-meta{display:flex;gap:12px;font-size:.73rem;color:var(--ink-muted);font-family:var(--font-mono)}
+.wire-conf{color:var(--green);font-weight:600}
+.locked-section{position:relative;margin:24px 0;border-radius:8px;overflow:hidden;border:2px solid var(--border-dark)}
+.locked-preview{padding:20px 24px;filter:blur(1.5px);opacity:.55;pointer-events:none;user-select:none}
+.locked-overlay{position:absolute;inset:0;background:linear-gradient(to bottom,transparent 0%,var(--cream) 35%);display:flex;flex-direction:column;align-items:center;justify-content:flex-end;padding:24px;text-align:center}
+.locked-badge{background:var(--ink);color:#fff;display:flex;align-items:center;gap:8px;padding:10px 18px;border-radius:6px;font-size:.82rem;font-weight:600;margin-bottom:8px}
+.locked-value{font-size:.78rem;color:var(--ink-light);margin-bottom:14px}
+.unlock-form{display:flex;gap:8px;width:100%;max-width:320px}
+.unlock-input{flex:1;padding:11px 14px;border:1px solid var(--border-dark);border-radius:6px;font-size:.85rem}
+.unlock-btn{padding:11px 18px;background:var(--red);color:#fff;border:none;border-radius:6px;font-weight:700;font-size:.8rem;cursor:pointer;white-space:nowrap}
+.unlock-btn:hover{background:#991b1b}
+.unlock-proof{font-size:.72rem;color:var(--ink-muted);margin-top:10px}
+.unlock-proof .num{color:var(--ink);font-weight:700}
+.email-capture{margin:24px 0;background:linear-gradient(135deg,#0f172a,#1e293b);border-radius:10px;padding:28px 24px;text-align:center}
+.email-capture h3{font-family:var(--font-serif);color:#fff;font-size:1.18rem;font-weight:400;margin-bottom:6px}
+.email-capture p{color:rgba(255,255,255,.55);font-size:.82rem;margin-bottom:16px}
+.email-input-wrap{display:flex;gap:8px;max-width:360px;margin:0 auto}
+.email-input{flex:1;padding:12px 16px;border-radius:6px;border:1px solid rgba(255,255,255,.15);background:rgba(255,255,255,.08);color:#fff;font-size:.88rem}
+.email-input::placeholder{color:rgba(255,255,255,.35)}
+.email-btn{padding:12px 20px;background:#fff;color:var(--ink);border:none;border-radius:6px;font-weight:700;font-size:.82rem;text-transform:uppercase;letter-spacing:.05em;cursor:pointer}
+.email-btn:hover{background:rgba(255,255,255,.9)}
+.email-proof{color:rgba(255,255,255,.45);font-size:.72rem;margin-top:12px}
+.email-proof .num{color:rgba(255,255,255,.75);font-weight:700}
+.cta-block{padding:20px 24px;display:flex;flex-direction:column;gap:10px}
+.cta-primary{display:block;text-align:center;padding:15px;background:var(--red);color:#fff;text-decoration:none;border-radius:7px;font-size:.88rem;font-weight:700;letter-spacing:.04em;text-transform:uppercase;transition:all .15s}
+.cta-primary:hover{background:#991b1b;transform:translateY(-1px);box-shadow:0 4px 14px rgba(185,28,28,.35)}
+.cta-secondary{display:block;text-align:center;padding:13px;background:transparent;color:var(--ink-light);text-decoration:none;border:1.5px solid var(--border-dark);border-radius:7px;font-size:.82rem;font-weight:600}
+.cta-secondary:hover{border-color:var(--ink-muted);color:var(--ink)}
+.footer{text-align:center;padding:24px;border-top:3px double var(--ink)}
+.footer-name{font-family:var(--font-serif);font-size:.95rem;color:var(--ink);margin-bottom:4px}
+.footer-disc{font-size:.7rem;color:var(--ink-muted);line-height:1.5}
+@media(max-width:520px){.masthead h1{font-size:2rem}.stats-grid .stat{padding:14px 8px}.stat-value{font-size:1.5rem}.content{padding:22px 18px}.lead-hed{font-size:1.35rem}.email-input-wrap,.unlock-form{flex-direction:column}.forces-row{justify-content:center}.temporal-bar{flex-direction:column;gap:6px}.memory-strip{flex-direction:column;gap:6px;text-align:center}.memory-strip .meta{margin-left:0}}
+@media print{body{background:#fff}.newspaper{box-shadow:none}.alert-bar,.temporal-bar,.streak-panel,.fomo-ticker,.locked-section,.email-capture,.cta-block{display:none!important}}
+</style>
+</head>
+<body>
+
+<div class="newspaper">
+
+  <header class="masthead">
+    <div class="masthead-date">Tuesday, February 3, 2026</div>
+    <h1>Chaos Intelligence</h1>
+    <div class="masthead-sub">Daily Market Briefing</div>
+  </header>
+
+  <div class="alert-bar">
+    <span class="live-pulse"></span>
+    LIVE SIGNAL — Fear Index at 17 (Extreme Fear) — AI Confidence 73%
+  </div>
+
+  <div class="temporal-bar">
+    <span>Situation active: <span class="value" id="activeTimer">--</span></span>
+    <span class="sep">•</span>
+    <span>Next update: <span class="value">03:45 PM UTC</span></span>
+    <span class="sep">•</span>
+    <div class="session-progress"><div class="bar" id="sessionBar" style="width:0%"></div></div>
+    <span class="expiry-warning">Expires: <span id="expiryTimer">--:--:--</span></span>
+  </div>
+
+  <div class="memory-strip">
+    <span class="check">✓</span>
+    <span>Yesterday: "Flight to liquidity" →</span>
+    <span class="outcome">NQ -1.2%</span>
+    <span class="meta">79.1% accuracy (90-day)</span>
+  </div>
+
+  <div class="stats-grid">
+    <div class="stat">
+      <div class="stat-value">17 <span class="stat-delta negative">▼ 25</span></div>
+      <div class="stat-label">Fear Index</div>
+      <div class="stat-context">Was 42 yesterday</div>
+    </div>
+    <div class="stat">
+      <div class="stat-value">73% <span class="stat-delta positive">▲ 2</span></div>
+      <div class="stat-label">AI Confidence</div>
+      <div class="stat-context">Up from 71%</div>
+    </div>
+    <div class="stat">
+      <div class="stat-value">79.1%</div>
+      <div class="stat-label">90-Day Accuracy</div>
+      <div class="stat-context">Industry avg: 61%</div>
+    </div>
+  </div>
+
+  <div class="forces-panel">
+    <div class="forces-header">
+      <span class="forces-title">Active Forces</span>
+      <span class="forces-count">3/9 firing</span>
+    </div>
+    <div class="forces-row">
+      <span class="force-pill active">💰 MONEY</span><span class="force-pill active">🤖 TECH</span><span class="force-pill active">⚡ ENERGY</span>
+      <span class="force-pill inactive">🏛️ POLITICS</span><span class="force-pill inactive">⚒️ JOBS</span>
+      <span class="force-pill collision">💥 MONEY → TECH collision</span>
+      <a href="#" class="forces-link">View All 9 →</a>
+    </div>
+  </div>
+
+  <div class="streak-panel">
+    <div class="streak-icon">🔥</div>
+    <div class="streak-content">
+      <div class="streak-title">You're on a 7-day reading streak</div>
+      <div class="streak-sub">Day 8 unlocks Pro scenario analysis</div>
+      <div class="streak-progress"><div class="bar" style="width:88%"></div></div>
+    </div>
+    <span class="streak-badge">DAY 7</span>
+  </div>
+
+  <div class="fomo-ticker">
+    <div class="fomo-track">
+      <div class="fomo-item"><div class="fomo-avatar">👤</div><span class="fomo-action">@TraderMike</span> just upgraded to Pro</div>
+      <div class="fomo-item"><div class="fomo-avatar">👤</div><span class="fomo-action">247 traders</span> acted on yesterday's signal</div>
+      <div class="fomo-item"><div class="fomo-avatar">👤</div><span class="fomo-action">@Sarah_FX</span> shared the CHAOS Line</div>
+      <div class="fomo-item"><div class="fomo-avatar">👤</div><span class="fomo-action">Black Swan alert</span> sent to Pro 2h ago</div>
+      <div class="fomo-item"><div class="fomo-avatar">👤</div><span class="fomo-action">312 new readers</span> joined this week</div>
+      <div class="fomo-item"><div class="fomo-avatar">👤</div><span class="fomo-action">@TraderMike</span> just upgraded to Pro</div>
+      <div class="fomo-item"><div class="fomo-avatar">👤</div><span class="fomo-action">247 traders</span> acted on yesterday's signal</div>
+      <div class="fomo-item"><div class="fomo-avatar">👤</div><span class="fomo-action">@Sarah_FX</span> shared the CHAOS Line</div>
+      <div class="fomo-item"><div class="fomo-avatar">👤</div><span class="fomo-action">Black Swan alert</span> sent to Pro 2h ago</div>
+      <div class="fomo-item"><div class="fomo-avatar">👤</div><span class="fomo-action">312 new readers</span> joined this week</div>
+    </div>
+  </div>
+
+  <div class="content">
+    <h3>GLOBAL STATUS</h3>
+<p>The world feels restless, caught between the accelerating promise and peril of technology, simmering geopolitical tensions, and recalibrating financial markets. There's a pervasive sense that fundamental shifts are underway, challenging traditional valuations and societal structures.</p>
+
+<h3>WHAT BROKE</h3>
+<p>Today, the illusion of predictable stability broke. We saw significant re-evaluation in key asset classes, particularly in speculative tech and cryptocurrencies, alongside direct impacts of technological advancement on human perception and employment. Geopolitical fault lines deepened, threatening a major escalation that could ripple through global energy supplies. Simultaneously, essential infrastructure showed vulnerabilities, directly affecting daily life.</p>
+
+<h3>WHY HUMANS FELT IT FIRST</h3>
+<ul>
+    <li>**The Digital Churn:** Humans are wrestling with the speed of technological change. Talk of "AI layoffs" and the strange reality of "AI psychosis" tests our understanding of work, intelligence, and even sanity. New digital ventures by political figures also expose the chaotic intersection of power and innovation.</li>
+    <li>**The Price of Uncertainty:** The speculative fervor around digital assets, whether crypto or highly valued tech, created a sense of unreal wealth or impending loss. When these assets began to falter, it triggered a collective unease about the sustainability of current economic narratives.</li>
+    <li>**The Shadow of Conflict:** The increased probability of significant geopolitical conflict, specifically a potential US attack on Iran, injects a deep, visceral anxiety. Humans instinctively understand the destabilizing ripple effects of war on trade, resources, and peace of mind.</li>
+    <li>**The Everyday Disruption:** Power outages, regardless of cause, remind us of our reliance on fragile systems. Being physically trapped or experiencing a sudden loss of modern conveniences creates immediate stress and vulnerability.</li>
+</ul>
+
+<h3>WHY MARKETS FOLLOWED</h3>
+<p>Markets reacted as they always do: to perceived risk and re-evaluation of value. The sell-off in silver and bitcoin, alongside a sharp fall in South Korean stocks, reflects a broader profit-taking or flight from speculative assets. Questions over the "AI trade" suggest investors are scrutinizing high valuations in the tech sector, especially when a major player like Nvidia is reportedly unwilling to pay an "OpenAI valuation tax." Disney's solid performance, however, shows that established consumer brands with tangible assets can still meet expectations, providing a counterpoint to the broader digital volatility. Corporate maneuvers like Oracle's massive capital raise indicate aggressive expansion plans in the cloud, signaling continued belief in core tech infrastructure despite wider market jitters. The looming specter of conflict directly introduces geopolitical risk premiums, affecting everything from energy futures (implicitly) to broader investor confidence.</p>
+
+<h3>WHAT THIS IS NOT</h3>
+<p>This is not a collapse of the global financial system nor an immediate catastrophic failure of technology. It is a period of intense re-pricing, risk assessment, and adaptation. The underlying human drive for innovation and growth remains, even as its consequences are debated and navigated.</p>
+
+<h3>WHAT COMES NEXT (SCENARIOS)</h3>
+<ul>
+    <li>If **WAR** escalates with a US attack on Iran → **ENERGY** prices will surge, disrupting global supply chains and causing widespread **MONEY** market panic, potentially tipping vulnerable economies into distress.</li>
+    <li>If **TECH** companies continue to consolidate and redefine valuation metrics while **POLITICS** struggles to regulate them → Expect continued **MONEY** volatility and increased **JOBS** uncertainty as the market struggles to find fair value in disruptive innovations like AI.</li>
+    <li>If **POLITICS** introduces clear regulatory frameworks for **TECH** and **MONEY** (e.g., regarding AI ethics, crypto, or corporate governance) → A period of adjustment followed by potential stabilization in markets and a clearer path for sustainable growth, easing **PEOPLE's** anxieties.</li>
+    <li>If **ENERGY** infrastructure resilience is not prioritized amidst growing demand and climate stress → More frequent **PEOPLE** disruptions, increasing social stress and economic losses.</li>
+</ul>
+
+<h3>CHAOS LINE</h3>
+<p><strong>The world rebalances on the shifting sands of silicon and sovereignty.</strong></p>
+
+    <div class="section-header" style="margin-top:28px">
+      <span class="section-label">The Outlook</span>
+      <span class="section-line"></span>
+    </div>
+    <ul class="outlook-list">
+      <li class="outlook-item">
+        <span class="outlook-tag regulation">Regulation</span>
+        <div class="outlook-content">
+          <div class="outlook-title">Expect immediate scrutiny on compute usage</div>
+          <div class="outlook-desc">AI governance frameworks being fast-tracked — watch for EU/US divergence.</div>
+        </div>
+      </li>
+      <li class="outlook-item">
+        <span class="outlook-tag capital">Capital</span>
+        <div class="outlook-content">
+          <div class="outlook-title">Hurdle rates rising through Q3</div>
+          <div class="outlook-desc">Only projects with sub-18-month payback survive.</div>
+        </div>
+      </li>
+      <li class="outlook-item">
+        <span class="outlook-tag sentiment">Sentiment</span>
+        <div class="outlook-content">
+          <div class="outlook-title">Fragile — one infrastructure failure triggers sell-offs</div>
+          <div class="outlook-desc">Market pricing zero tolerance for execution risk.</div>
+        </div>
+      </li>
+    </ul>
+
+    <div class="chaos-line">
+      <div class="chaos-label">⚡ CHAOS Line</div>
+      <p class="chaos-quote">"The market is holding its breath — and the next exhale will move in two directions at once."</p>
+      <div class="chaos-actions">
+        <button class="share-btn" onclick="copyQuote(this,'twitter')">📤 Twitter</button>
+        <button class="share-btn" onclick="copyQuote(this,'telegram')">📤 Telegram</button>
+        <button class="share-btn" onclick="copyQuote(this,'copy')">📋 Copy</button>
+        <span class="share-count">1,247 shared today</span>
+      </div>
+    </div>
+
+    <div class="wire-section">
+      <div class="section-header">
+        <span class="section-label">Latest Wire</span>
+        <span class="section-line"></span>
+      </div>
+      
+        <div class="wire-item">
+          <span class="wire-source">CNBC</span>
+          <div class="wire-content">
+            <div class="wire-headline">Stock futures fall after silver, bitcoin sell off; questions loom over AI trade: Live updates - CNBC</div>
+            <div class="wire-meta"><span>12:44 PM</span><span class="wire-conf">94% confidence</span></div>
+          </div>
+        </div>
+      
+        <div class="wire-item">
+          <span class="wire-source">Bloomberg</span>
+          <div class="wire-content">
+            <div class="wire-headline">Chinese Speculators Set the Stage for Gold and Silver Crash - Bloomberg.com</div>
+            <div class="wire-meta"><span>10:35 AM</span><span class="wire-conf">89% confidence</span></div>
+          </div>
+        </div>
+      
+        <div class="wire-item">
+          <span class="wire-source">CNBC</span>
+          <div class="wire-content">
+            <div class="wire-headline">Disney beats Wall Street expectations propelled by theme parks and streaming - CNBC</div>
+            <div class="wire-meta"><span>05:01 AM</span><span class="wire-conf">97% confidence</span></div>
+          </div>
+        </div>
+      
+    </div>
+
+    <div class="locked-section">
+      <div class="locked-preview">
+        <div class="section-label">Pro Scenarios</div>
+        <h3 class="analysis-title">If TECH regulation hits this week: 3 positioning plays</h3>
+        <p class="analysis-text">Scenario A shows a 73% probability chain: regulation announcement triggers a rotation into defensive sectors. Historical precedent from 2022-Q1 suggests the window is 48-72 hours.</p>
+      </div>
+      <div class="locked-overlay">
+        <div class="locked-badge"><span>🔒</span> Pro Scenario Analysis</div>
+        <div class="locked-value">See 3 positioning plays with 73% probability</div>
+        <form class="unlock-form" action="https://app.beehiiv.com/subscribe/YOUR_ID" method="POST">
+          <input type="email" class="unlock-input" placeholder="your@email.com" required>
+          <button type="submit" class="unlock-btn">UNLOCK FREE →</button>
+        </form>
+        <div class="unlock-proof">Already <span class="num">2,847</span> analysts unlocked today</div>
+      </div>
+    </div>
+
+    <div class="email-capture">
+      <h3>Never Miss a Signal</h3>
+      <p>Free intelligence delivered at market open. Join 2,847 readers.</p>
+      <form class="email-input-wrap" action="https://app.beehiiv.com/subscribe/YOUR_ID" method="POST">
+        <input type="email" class="email-input" placeholder="your@email.com" required>
+        <button type="submit" class="email-btn">Subscribe</button>
+      </form>
+      <div class="email-proof">🔒 No spam. <span class="num">94%</span> of subscribers stay after 30 days.</div>
+    </div>
+  </div>
+
+  <div class="cta-block">
+    <a href="https://t.me/your_channel" class="cta-primary">🔓 Unlock Pro — Get Live Alerts on Telegram</a>
+    <a href="https://chaos.sumanthworks.com" class="cta-secondary">Read Methodology</a>
+  </div>
+
+  <footer class="footer">
+    <div class="footer-name">Chaos Intelligence</div>
+    <div class="footer-disc">© 2026. For informational purposes only. Not financial advice.<br>Probabilities are model-generated estimates based on historical data.</div>
+  </footer>
+
+</div>
+
+<script>
+(function(){
+  const start = Date.now();
+  const session = 8 * 60 * 60 * 1000;
+  
+  function update(){
+    const elapsed = Date.now() - start;
+    const remaining = session - (elapsed % session);
+    
+    const h = Math.floor((elapsed/1000/60/60) % 24);
+    const m = Math.floor((elapsed/1000/60) % 60);
+    document.getElementById('activeTimer').textContent = h + 'h ' + m + 'm';
+    
+    const eH = Math.floor(remaining/1000/60/60);
+    const eM = Math.floor((remaining/1000/60) % 60);
+    const eS = Math.floor((remaining/1000) % 60);
+    document.getElementById('expiryTimer').textContent = 
+      String(eH).padStart(2,'0') + ':' + String(eM).padStart(2,'0') + ':' + String(eS).padStart(2,'0');
+    
+    const pct = Math.min(100, (elapsed/session) * 100);
+    document.getElementById('sessionBar').style.width = pct + '%';
+  }
+  
+  update();
+  setInterval(update, 1000);
+})();
+
+function copyQuote(btn, type){
+  const line = '"The market is holding its breath — and the next exhale will move in two directions at once." — CHAOS Intelligence';
+  const url = ' https://chaos.sumanthworks.com';
+  const variants = {
+    twitter: line + url,
+    telegram: '⚡ CHAOS LINE\n' + line + url,
+    copy: line
+  };
+  navigator.clipboard.writeText(variants[type] || line).then(() => {
+    const orig = btn.textContent;
+    btn.textContent = '✓ Copied';
+    setTimeout(() => btn.textContent = orig, 1200);
+  });
+}
+</script>
+
+</body>
+</html>
