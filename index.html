@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0a0a0a">
+<title>CHAOS Intelligence — Neutral Conditions Detected</title>
+<meta name="description" content="Live prediction market intelligence. 2/9 forces active. 0 collisions detected.">
+<link rel="preconnect" href="https://fonts.googleapis.com ">
+<link rel="preconnect" href="https://fonts.gstatic.com " crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400 ;500;600;700;800&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#0a0a0a;--cream:#faf8f4;--red:#c41e3a;--green:#059669;--gold:#d97706;--blue:#2563eb;
+  --surface:#f5f5f0;--border:#e0ddd6;--muted:#737373;
+  --serif:'Libre Baskerville',Georgia,serif;
+  --sans:'Inter',-apple-system,sans-serif;
+  --mono:ui-monospace,'SF Mono',monospace;
+  --shadow:0 2px 8px rgba(0,0,0,.08);
+  --shadow-lg:0 8px 24px rgba(0,0,0,.12)
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{font-size:16px;-webkit-font-smoothing:antialiased;scroll-behavior:smooth}
+body{background:#e8e4df;font-family:var(--sans);color:var(--ink);line-height:1.6}
+
+/* CONTAINER */
+.paper{max-width:680px;margin:0 auto;background:var(--cream);box-shadow:var(--shadow-lg);min-height:100vh}
+
+/* MASTHEAD */
+.mast{text-align:center;padding:24px 20px;border-bottom:3px double var(--ink)}
+.mast-date{font-size:.7rem;text-transform:uppercase;letter-spacing:.12em;color:var(--muted);margin-bottom:8px}
+.mast h1{font-family:var(--serif);font-size:2.2rem;font-weight:700;letter-spacing:-.02em;margin-bottom:4px}
+.mast-sub{font-size:.68rem;text-transform:uppercase;letter-spacing:.18em;color:var(--muted)}
+
+/* ALERT BAR */
+.alert{background:var(--red);color:#fff;padding:10px 20px;display:flex;align-items:center;justify-content:center;gap:10px;font-size:.8rem;font-weight:700;letter-spacing:.02em}
+.alert .dot{width:8px;height:8px;border-radius:50%;background:#fff;animation:ping 1.5s infinite}
+@keyframes ping{0%{box-shadow:0 0 0 0 rgba(255,255,255,.7)}70%{box-shadow:0 0 0 10px rgba(255,255,255,0)}}
+
+/* COUNTDOWN BAR */
+.countdown{background:linear-gradient(135deg,#1a1a2e,#16213e);padding:12px 20px;display:flex;align-items:center;justify-content:center;gap:16px;font-size:.75rem;color:rgba(255,255,255,.7)}
+.countdown .timer{color:#fff;font-family:var(--mono);font-weight:700;font-size:.85rem}
+.countdown .expires{color:#fbbf24}
+
+/* STATS */
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border)}
+.stat{background:var(--cream);padding:16px 12px;text-align:center}
+.stat-val{font-family:var(--mono);font-size:1.8rem;font-weight:800;line-height:1;display:flex;align-items:baseline;justify-content:center;gap:6px}
+.stat-val.fear-hi{color:var(--red)}
+.stat-val.fear-mid{color:var(--gold)}
+.stat-val.fear-lo{color:var(--green)}
+.stat-trend{font-size:.9rem;font-weight:700}
+.stat-trend.up{color:var(--green)}
+.stat-trend.down{color:var(--red)}
+.stat-label{font-size:.65rem;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-top:4px}
+.stat-context{font-size:.7rem;color:var(--muted);margin-top:2px;font-style:italic}
+
+/* FORCES MATRIX */
+.forces{padding:18px 20px;background:var(--surface);border-bottom:1px solid var(--border)}
+.forces-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.forces-title{font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:var(--muted)}
+.forces-count{font-family:var(--mono);font-size:.72rem;font-weight:700;color:var(--red)}
+.forces-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:10px}
+.force-chip{
+  padding:10px;border-radius:8px;background:rgba(0,0,0,.04);
+  display:flex;flex-direction:column;align-items:center;gap:4px;
+  font-size:.72rem;color:var(--muted);transition:all .2s;cursor:default
+}
+.force-chip.active{
+  background:rgba(196,30,58,.1);color:var(--red);font-weight:700;
+  border:1px solid rgba(196,30,58,.25);transform:scale(1.02)
+}
+.force-chip .emoji{font-size:1.3rem}
+.force-chip .name{font-size:.68rem;text-transform:uppercase;letter-spacing:.08em}
+.force-chip .bar{
+  width:100%;height:3px;background:rgba(0,0,0,.08);border-radius:2px;margin-top:2px;overflow:hidden
+}
+.force-chip .bar-fill{height:100%;background:var(--red);border-radius:2px;transition:width .6s ease}
+
+/* COLLISION BANNER */
+.collision-banner{
+  background:linear-gradient(135deg,rgba(196,30,58,.12),rgba(217,119,6,.12));
+  border:1px solid rgba(196,30,58,.25);border-radius:8px;
+  padding:12px 16px;margin-top:10px;
+  display:flex;align-items:center;gap:10px
+}
+.collision-banner .icon{font-size:1.4rem}
+.collision-banner .text{flex:1}
+.collision-banner .label{font-size:.65rem;text-transform:uppercase;letter-spacing:.1em;color:var(--gold);font-weight:700;margin-bottom:2px}
+.collision-banner .desc{font-size:.8rem;color:var(--ink);font-weight:600}
+
+/* STREAK */
+.streak{background:linear-gradient(135deg,#0f172a,#1e293b);padding:14px 20px;display:flex;align-items:center;gap:14px}
+.streak .fire{font-size:1.6rem}
+.streak .content{flex:1}
+.streak .title{color:#fff;font-size:.88rem;font-weight:700;margin-bottom:2px}
+.streak .sub{color:rgba(255,255,255,.5);font-size:.72rem}
+.streak .progress{height:6px;background:rgba(255,255,255,.15);border-radius:3px;margin-top:6px;max-width:220px;overflow:hidden}
+.streak .progress-bar{height:100%;background:linear-gradient(90deg,#fbbf24,#f59e0b);border-radius:3px;transition:width .5s ease}
+.streak .badge{
+  background:rgba(251,191,36,.15);border:1px solid rgba(251,191,36,.3);
+  color:#fbbf24;font-family:var(--mono);font-size:.75rem;font-weight:700;
+  padding:6px 14px;border-radius:6px;white-space:nowrap
+}
+
+/* SOCIAL PROOF TICKER */
+.ticker{
+  background:#f8f6f2;border-bottom:1px solid var(--border);
+  padding:10px 0;overflow:hidden;white-space:nowrap
+}
+.ticker-track{display:inline-flex;gap:32px;animation:scroll 25s linear infinite}
+@keyframes scroll{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+.ticker-item{
+  font-size:.72rem;color:var(--muted);
+  display:inline-flex;align-items:center;gap:6px;flex-shrink:0
+}
+.ticker-item .avatar{
+  width:20px;height:20px;border-radius:50%;background:var(--border);
+  display:flex;align-items:center;justify-content:center;font-size:.65rem
+}
+.ticker-item .action{color:var(--ink);font-weight:600}
+
+/* SECTION LABEL */
+.sec-label{
+  font-size:.68rem;text-transform:uppercase;letter-spacing:.14em;
+  color:var(--red);font-weight:700;margin-bottom:8px
+}
+
+/* LEAD */
+.lead{padding:20px 24px}
+.lead-hed{font-family:var(--serif);font-size:1.6rem;font-weight:700;line-height:1.25;margin-bottom:6px}
+.lead-deck{font-size:.88rem;color:var(--muted);font-style:italic;margin-bottom:14px;padding-bottom:12px;border-bottom:1px solid var(--border)}
+.lead-body{font-size:.92rem;color:var(--ink);line-height:1.75}
+.lead-body .drop{
+  float:left;font-family:var(--serif);font-size:3.5rem;
+  line-height:.8;font-weight:700;margin:4px 8px 0 0
+}
+
+/* ANALYSIS SECTIONS */
+.analysis{padding:16px 24px}
+.analysis h3{
+  font-size:.7rem;text-transform:uppercase;letter-spacing:.12em;
+  color:var(--red);font-weight:700;margin:18px 0 8px
+}
+.analysis h3:first-child{margin-top:0}
+.analysis h4{font-family:var(--serif);font-size:1.05rem;color:var(--ink);font-weight:700;margin:14px 0 6px}
+.analysis p{font-size:.9rem;color:var(--ink);line-height:1.7;margin-bottom:10px}
+.analysis strong{font-weight:700}
+.analysis ul{list-style:none;margin:0 0 10px}
+.analysis li{font-size:.88rem;color:var(--ink);padding-left:14px;position:relative;margin-bottom:6px}
+.analysis li:before{content:"—";position:absolute;left:0;color:var(--muted)}
+
+/* OUTLOOK ITEMS */
+.outlook-item{
+  display:flex;gap:12px;margin-bottom:10px;padding:10px;
+  background:rgba(0,0,0,.02);border-radius:6px;border-left:3px solid var(--gold)
+}
+.outlook-tag{
+  font-size:.65rem;font-weight:700;text-transform:uppercase;
+  letter-spacing:.08em;padding:4px 10px;border-radius:4px;
+  height:fit-content;white-space:nowrap;margin-top:1px
+}
+.outlook-tag.reg{background:var(--red);color:#fff}
+.outlook-tag.cap{background:var(--gold);color:#fff}
+.outlook-tag.sent{background:#6366f1;color:#fff}
+.outlook-content{flex:1}
+.outlook-title{font-size:.86rem;font-weight:700;margin-bottom:2px}
+.outlook-desc{font-size:.82rem;color:var(--muted)}
+
+/* CHAOS QUOTE */
+.chaos-quote{
+  margin:16px 24px;padding:20px;
+  background:linear-gradient(135deg,rgba(217,119,6,.08),rgba(251,191,36,.08));
+  border-left:4px solid var(--gold);border-radius:0 8px 8px 0
+}
+.chaos-quote-label{
+  font-size:.65rem;text-transform:uppercase;letter-spacing:.15em;
+  color:var(--gold);font-weight:700;margin-bottom:8px;
+  display:flex;align-items:center;gap:6px
+}
+.chaos-quote-label::before{content:"✦";font-size:.8rem}
+.chaos-quote-text{
+  font-family:var(--serif);font-size:1.12rem;font-style:italic;
+  color:var(--ink);line-height:1.5;margin-bottom:14px
+}
+.chaos-quote-actions{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.share-btn{
+  padding:7px 14px;border-radius:5px;font-size:.72rem;font-weight:700;
+  border:none;cursor:pointer;display:inline-flex;align-items:center;gap:5px;
+  transition:all .15s;font-family:var(--sans)
+}
+.share-btn.tw{background:#1da1f2;color:#fff}
+.share-btn.tw:hover{background:#1a91da}
+.share-btn.tg{background:#0088cc;color:#fff}
+.share-btn.tg:hover{background:#0077bb}
+.share-btn.copy{background:var(--cream);color:var(--ink);border:1px solid var(--border)}
+.share-btn.copy:hover{background:var(--surface)}
+.share-count{font-size:.7rem;color:var(--muted);margin-left:auto;font-family:var(--mono)}
+
+/* WIRE */
+.wire{padding:16px 24px}
+.wire-item{padding:10px 0;border-bottom:1px solid var(--border);display:flex;gap:12px}
+.wire-item:last-child{border:none}
+.wire-source{
+  font-size:.65rem;font-weight:700;text-transform:uppercase;
+  letter-spacing:.06em;color:var(--red);white-space:nowrap;padding-top:2px
+}
+.wire-headline{font-size:.86rem;font-weight:600;color:var(--ink);line-height:1.35}
+.wire-meta{font-size:.7rem;color:var(--muted);margin-top:2px;display:flex;gap:8px;font-family:var(--mono)}
+.wire-conf{color:var(--gold);font-weight:600}
+.wire-conf.high{color:var(--green)}
+
+/* LOCKED CONTENT */
+.locked{
+  position:relative;margin:16px 24px;
+  border:2px dashed var(--border);border-radius:10px;overflow:hidden
+}
+.locked-preview{
+  padding:20px;filter:blur(2px);opacity:.4;pointer-events:none;user-select:none
+}
+.locked-preview h3{font-size:.75rem;color:var(--red);margin-bottom:6px}
+.locked-preview p{font-size:.88rem;color:var(--muted);margin-bottom:8px}
+.locked-overlay{
+  position:absolute;inset:0;
+  background:linear-gradient(to bottom,transparent 0%,var(--cream) 35%);
+  display:flex;flex-direction:column;align-items:center;justify-content:flex-end;
+  padding-bottom:28px
+}
+.locked-badge{
+  background:var(--ink);color:#fff;
+  padding:10px 20px;border-radius:8px;
+  font-size:.82rem;font-weight:700;
+  display:flex;align-items:center;gap:8px;margin-bottom:8px
+}
+.locked-sub{font-size:.72rem;color:var(--muted);text-align:center}
+
+/* PRO CTA */
+.pro-cta{
+  margin:16px 24px;padding:24px 20px;
+  background:linear-gradient(135deg,#0f172a,#1e293b);
+  border-radius:10px;text-align:center
+}
+.pro-label{
+  display:inline-block;background:linear-gradient(90deg,#fbbf24,#f59e0b);
+  color:#000;font-size:.65rem;font-weight:700;text-transform:uppercase;
+  letter-spacing:.1em;padding:4px 12px;border-radius:12px;margin-bottom:12px
+}
+.pro-title{color:#fff;font-family:var(--serif);font-size:1.15rem;font-weight:700;margin-bottom:6px}
+.pro-desc{color:rgba(255,255,255,.6);font-size:.8rem;margin-bottom:16px}
+.pro-form{display:flex;gap:8px;max-width:360px;margin:0 auto}
+.pro-input{
+  flex:1;padding:11px 14px;border:1px solid rgba(255,255,255,.2);
+  border-radius:6px;background:rgba(255,255,255,.1);color:#fff;
+  font-size:.85rem;font-family:var(--sans)
+}
+.pro-input::placeholder{color:rgba(255,255,255,.4)}
+.pro-btn{
+  padding:11px 20px;background:var(--red);color:#fff;border:none;
+  border-radius:6px;font-size:.8rem;font-weight:700;cursor:pointer;
+  text-transform:uppercase;letter-spacing:.04em;font-family:var(--sans);
+  transition:all .15s
+}
+.pro-btn:hover{background:#a81830}
+.pro-proof{color:rgba(255,255,255,.45);font-size:.7rem;margin-top:12px}
+.pro-proof .num{color:rgba(255,255,255,.8);font-weight:700}
+
+/* NEWSLETTER */
+.newsletter{padding:20px 24px;background:var(--surface);border-top:1px solid var(--border)}
+.newsletter-title{font-family:var(--serif);font-size:1.08rem;color:var(--ink);margin-bottom:4px;text-align:center}
+.newsletter-desc{font-size:.8rem;color:var(--muted);margin-bottom:14px;text-align:center}
+.newsletter-form{display:flex;gap:8px;max-width:340px;margin:0 auto}
+.newsletter-input{
+  flex:1;padding:10px 14px;border:1px solid var(--border);
+  border-radius:6px;font-size:.84rem;font-family:var(--sans);background:#fff
+}
+.newsletter-btn{
+  padding:10px 18px;background:var(--ink);color:#fff;border:none;
+  border-radius:6px;font-size:.78rem;font-weight:700;cursor:pointer;
+  font-family:var(--sans);transition:all .15s
+}
+.newsletter-btn:hover{background:#1a1a1a}
+.newsletter-proof{
+  display:flex;align-items:center;justify-content:center;gap:6px;
+  font-size:.7rem;color:var(--muted);margin-top:10px
+}
+
+/* TELEGRAM CTA */
+.tg-cta{
+  display:block;text-align:center;padding:14px 20px;
+  background:var(--red);color:#fff;text-decoration:none;
+  font-size:.82rem;font-weight:700;letter-spacing:.04em;
+  text-transform:uppercase;transition:all .15s
+}
+.tg-cta:hover{background:#a81830}
+
+/* FOOTER */
+.methodology{padding:16px 24px;text-align:center;border-top:1px solid var(--border)}
+.methodology-link{
+  color:var(--muted);font-size:.75rem;text-decoration:none;
+  display:inline-flex;align-items:center;gap:6px
+}
+.methodology-link:hover{color:var(--ink)}
+
+.footer{padding:18px 24px;text-align:center;font-size:.7rem;color:var(--muted);border-top:1px solid var(--border)}
+.footer-brand{font-family:var(--serif);font-size:.92rem;color:var(--ink);margin-bottom:6px}
+.footer-disc{font-size:.68rem;line-height:1.5;max-width:420px;margin:8px auto 0}
+
+/* RESPONSIVE */
+@media(max-width:680px){
+  .mast h1{font-size:1.8rem}
+  .stats{grid-template-columns:1fr}
+  .stat{padding:12px}
+  .stat-val{font-size:1.5rem}
+  .forces-grid{grid-template-columns:repeat(2,1fr)}
+  .lead{padding:18px 18px}
+  .lead-hed{font-size:1.35rem}
+  .analysis,.wire,.pro-cta,.newsletter{padding-left:18px;padding-right:18px}
+  .chaos-quote,.locked{margin-left:18px;margin-right:18px}
+  .pro-form,.newsletter-form{flex-direction:column}
+  .ticker-track{animation-duration:20s}
+}
+
+@media(prefers-reduced-motion:reduce){
+  .dot,.ticker-track{animation:none!important}
+}
+
+@media print{
+  body{background:#fff}
+  .paper{box-shadow:none}
+  .alert,.countdown,.streak,.ticker,.pro-cta,.tg-cta,.locked{display:none!important}
+}
+</style>
+</head>
+<body>
+
+<div class="paper">
+
+  <!-- MASTHEAD -->
+  <header class="mast">
+    <div class="mast-date">Wednesday, February 4, 2026</div>
+    <h1>Chaos Intelligence</h1>
+    <div class="mast-sub">Global Situation Analysis</div>
+  </header>
+
+  <!-- ALERT BAR -->
+  <div class="alert">
+    <span class="dot"></span>
+    <span>LIVE SIGNAL — Neutral at 14 — 2/9 Forces Active</span>
+  </div>
+
+  <!-- COUNTDOWN -->
+  <div class="countdown">
+    <span>Report active <span class="timer" id="timer">0h 0m</span></span>
+    <span>|</span>
+    <span class="expires">Expires: <span id="expire">04:00:00</span></span>
+  </div>
+
+  <!-- STATS -->
+  <div class="stats">
+    <div class="stat">
+      <div class="stat-val fear-lo">
+        14 <span class="stat-trend up">▲ 4</span>
+      </div>
+      <div class="stat-label">Fear Index</div>
+      <div class="stat-context">Neutral</div>
+    </div>
+    <div class="stat">
+      <div class="stat-val" style="color:var(--gold)">73% <span class="stat-trend up">▲ 2</span></div>
+      <div class="stat-label">AI Signal</div>
+      <div class="stat-context">High confidence</div>
+    </div>
+    <div class="stat">
+      <div class="stat-val" style="color:var(--green)">79.1% <span class="stat-trend down">▼ 0.3</span></div>
+      <div class="stat-label">Win Rate</div>
+      <div class="stat-context">19 wins/streak</div>
+    </div>
+  </div>
+
+  <!-- FORCES MATRIX -->
+  <div class="forces">
+    <div class="forces-head">
+      <span class="forces-title">Active Forces</span>
+      <span class="forces-count">2/9 firing</span>
+    </div>
+    <div class="forces-grid">
+      <div class="force-chip active">
+          <div class="emoji">💰</div>
+          <div class="name">MONEY</div>
+          <div class="bar"><div class="bar-fill" style="width:20%"></div></div>
+        </div><div class="force-chip">
+          <div class="emoji">🤖</div>
+          <div class="name">TECH</div>
+          <div class="bar"><div class="bar-fill" style="width:0%"></div></div>
+        </div><div class="force-chip">
+          <div class="emoji">⚡</div>
+          <div class="name">ENERGY</div>
+          <div class="bar"><div class="bar-fill" style="width:0%"></div></div>
+        </div><div class="force-chip">
+          <div class="emoji">🏛️</div>
+          <div class="name">POLITICS</div>
+          <div class="bar"><div class="bar-fill" style="width:0%"></div></div>
+        </div><div class="force-chip">
+          <div class="emoji">⚒️</div>
+          <div class="name">JOBS</div>
+          <div class="bar"><div class="bar-fill" style="width:0%"></div></div>
+        </div><div class="force-chip">
+          <div class="emoji">⚔️</div>
+          <div class="name">WAR</div>
+          <div class="bar"><div class="bar-fill" style="width:0%"></div></div>
+        </div><div class="force-chip">
+          <div class="emoji">🌾</div>
+          <div class="name">FOOD</div>
+          <div class="bar"><div class="bar-fill" style="width:0%"></div></div>
+        </div><div class="force-chip active">
+          <div class="emoji">💣</div>
+          <div class="name">DEBT</div>
+          <div class="bar"><div class="bar-fill" style="width:20%"></div></div>
+        </div><div class="force-chip">
+          <div class="emoji">👶</div>
+          <div class="name">PEOPLE</div>
+          <div class="bar"><div class="bar-fill" style="width:0%"></div></div>
+        </div>
+    </div>
+    
+  </div>
+
+  <!-- STREAK -->
+  <div class="streak">
+    <div class="fire">🔥</div>
+    <div class="content">
+      <div class="title" id="streakTitle">You're on a 7-day streak</div>
+      <div class="sub">Day 8 unlocks Pro scenario analysis</div>
+      <div class="progress"><div class="progress-bar" id="streakBar" style="width:33%"></div></div>
+    </div>
+    <div class="badge" id="streakBadge">DAY 7</div>
+  </div>
+
+  <!-- SOCIAL PROOF TICKER -->
+  <div class="ticker">
+    <div class="ticker-track">
+      <div class="ticker-item"><div class="avatar">👤</div><span class="action">@TraderMike</span> upgraded to Pro</div>
+      <div class="ticker-item"><div class="avatar">👤</div><span class="action">247 traders</span> acted on signal</div>
+      <div class="ticker-item"><div class="avatar">👤</div><span class="action">@CryptoSarah</span> shared CHAOS Line</div>
+      <div class="ticker-item"><div class="avatar">👤</div><span class="action">Black Swan alert</span> sent 2h ago</div>
+      <div class="ticker-item"><div class="avatar">👤</div><span class="action">312 new readers</span> this week</div>
+      <div class="ticker-item"><div class="avatar">👤</div><span class="action">@TraderMike</span> upgraded to Pro</div>
+      <div class="ticker-item"><div class="avatar">👤</div><span class="action">247 traders</span> acted on signal</div>
+      <div class="ticker-item"><div class="avatar">👤</div><span class="action">@CryptoSarah</span> shared CHAOS Line</div>
+      <div class="ticker-item"><div class="avatar">👤</div><span class="action">Black Swan alert</span> sent 2h ago</div>
+      <div class="ticker-item"><div class="avatar">👤</div><span class="action">312 new readers</span> this week</div>
+    </div>
+  </div>
+
+  <!-- LEAD -->
+  <section class="lead">
+    <div class="sec-label">Global Status</div>
+    <h2 class="lead-hed">Fed holds, AI spends — the liquidity vs growth tension reaches its threshold</h2>
+    <p class="lead-deck">Neutral conditions. 0 force collisions detected. Generated 10:33 UTC.</p>
+    <div class="lead-body">
+      <span class="drop">F</span>ed signals rate hold through Q2 while AI infrastructure spend accelerates past $200B — creating a rare liquidity vs growth tension. Capital is hesitating at the threshold: tech valuations demand cheap money, but inflation data doesn't justify it. The next 48 hours is the decision window.
+    </div>
+  </section>
+
+  <!-- ANALYSIS -->
+  <section class="analysis">
+    <h3>GLOBAL STATUS</h3>
+<p>Global **MONEY** flows show renewed vigor, with equity **MARKETS** climbing on positive US data, easing concerns around **DEBT
+  </section>
+
+  <!-- CHAOS QUOTE -->
+  <div class="chaos-quote">
+    <div class="chaos-quote-label">The Chaos Line</div>
+    <div class="chaos-quote-text">"The market is holding its breath — and the next exhale will move in two directions at once."</div>
+    <div class="chaos-quote-actions">
+      <button class="share-btn tw" onclick="share('tw')">🐦 Share</button>
+      <button class="share-btn tg" onclick="share('tg')">✈️ Telegram</button>
+      <button class="share-btn copy" onclick="share('copy')">📋 Copy</button>
+      <span class="share-count">1,247 shared today</span>
+    </div>
+  </div>
+
+  <!-- WIRE -->
+  <section class="wire">
+    <div class="sec-label">Latest Wires</div>
+    <div class="wire-item">
+      <span class="wire-source">REUTERS</span>
+      <div>
+        <div class="wire-headline">Federal Reserve minutes reveal internal split on rate trajectory</div>
+        <div class="wire-meta"><span>12m ago</span><span class="wire-conf high">94% conf</span></div>
+      </div>
+    </div>
+    <div class="wire-item">
+      <span class="wire-source">BLOOMBERG</span>
+      <div>
+        <div class="wire-headline">AI infrastructure spend exceeds $200B — hyperscalers accelerate</div>
+        <div class="wire-meta"><span>1h ago</span><span class="wire-conf high">89% conf</span></div>
+      </div>
+    </div>
+    <div class="wire-item">
+      <span class="wire-source">BLS</span>
+      <div>
+        <div class="wire-headline">CPI revised upward 0.3% — inflation stickier than priced</div>
+        <div class="wire-meta"><span>3h ago</span><span class="wire-conf high">97% conf</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- LOCKED CONTENT -->
+  <div class="locked">
+    <div class="locked-preview">
+      <h3>Pro Scenarios</h3>
+      <p>If TECH regulation hits this week: 3 positioning plays with 73% probability chain. Historical precedent from 2022-Q1 suggests the window is 48-72 hours. The optimal entry points are...</p>
+      <p>Scenario B assumes Fed capitulates. Risk assets see sharp reversal with MONEY flowing back into...</p>
+    </div>
+    <div class="locked-overlay">
+      <div class="locked-badge"><span>🔒</span> Pro Content</div>
+      <div class="locked-sub">Unlock with Pro subscription</div>
+    </div>
+  </div>
+
+  <!-- PRO CTA -->
+  <div class="pro-cta">
+    <div class="pro-label">Pro Scenario Analysis</div>
+    <div class="pro-title">See 3 positioning plays with 73% probability</div>
+    <div class="pro-desc">Unlock exclusive signals before market open · $15/mo</div>
+    <div class="pro-form">
+      <input type="email" class="pro-input" placeholder="your@email.com">
+      <button class="pro-btn">Unlock →</button>
+    </div>
+    <div class="pro-proof">🔒 Already <span class="num">2,847</span> analysts unlocked today</div>
+  </div>
+
+  <!-- NEWSLETTER -->
+  <div class="newsletter">
+    <div class="newsletter-title">Never Miss a Signal</div>
+    <div class="newsletter-desc">Free intelligence at market open. Join 2,847 readers.</div>
+    <div class="newsletter-form">
+      <input type="email" class="newsletter-input" placeholder="your@email.com">
+      <button class="newsletter-btn">Subscribe</button>
+    </div>
+    <div class="newsletter-proof">🔒 No spam. 94% stay after 30 days.</div>
+  </div>
+
+  <!-- TELEGRAM CTA -->
+  <a href="https://t.me/chaaboratory " class="tg-cta" target="_blank">🔓 Get Live Alerts on Telegram</a>
+
+  <!-- METHODOLOGY -->
+  <div class="methodology">
+    <a href="https://chaos.sumanthworks.com /methodology" class="methodology-link">📖 Read Methodology</a>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="footer-brand">Chaos Intelligence</div>
+    <div>© 2026. For informational purposes only. Not financial advice.</div>
+    <div class="footer-disc">Probabilities are model-generated estimates. Past performance does not guarantee future results.</div>
+  </footer>
+
+</div>
+
+<script>
+(function(){
+  // Streak
+  var key='chaos_streak';
+  var stored=localStorage.getItem(key);
+  var session=stored?JSON.parse(stored):{streak:1,last:0};
+  var today=new Date().toDateString();
+  var lastDate=session.last?new Date(session.last).toDateString():"";
+  var yesterday=new Date(Date.now()-86400000).toDateString();
+  if(lastDate!==today){
+    if(lastDate===yesterday){session.streak++;}
+    else if(lastDate!==""){session.streak=1;}
+  }
+  session.last=Date.now();
+  localStorage.setItem(key,JSON.stringify(session));
+  var tEl=document.getElementById('streakTitle');
+  var bEl=document.getElementById('streakBadge');
+  var pEl=document.getElementById('streakBar');
+  if(tEl)tEl.textContent="You're on a "+session.streak+"-day streak";
+  if(bEl)bEl.textContent="DAY "+session.streak;
+  if(pEl)pEl.style.width=Math.min(100,(session.streak/21)*100)+"%";
+  
+  // Timers
+  var start=1770201212905;
+  var expire=1770215612905;
+  function tick(){
+    var elapsed=Date.now()-start;
+    var h=Math.floor(elapsed/3600000);
+    var m=Math.floor((elapsed%3600000)/60000);
+    var tEl=document.getElementById('timer');
+    if(tEl)tEl.textContent=h+"h "+m+"m";
+  }
+  function countdown(){
+    var left=expire-Date.now();
+    if(left<=0){expire=Date.now()+4*60*60*1000;left=4*60*60*1000;}
+    var h=Math.floor(left/3600000);
+    var m=Math.floor((left%3600000)/60000);
+    var s=Math.floor((left%60000)/1000);
+    var eEl=document.getElementById('expire');
+    if(eEl)eEl.textContent=(h<10?"0":"")+h+":"+(m<10?"0":"")+m+":"+(s<10?"0":"")+s;
+  }
+  tick();countdown();
+  setInterval(tick,60000);
+  setInterval(countdown,1000);
+})();
+
+function share(type){
+  var line="The market is holding its breath — and the next exhale will move in two directions at once.";
+  var url="https://chaos.sumanthworks.com ";
+  var text={
+    tw:line+" — CHAOS Intelligence "+url,
+    tg:"⚡ CHAOS LINE\n"+line+"\n\n"+url,
+    copy:line
+  };
+  navigator.clipboard.writeText(text[type]||line).then(()=>{
+    var btn=event.target;
+    var orig=btn.textContent;
+    btn.textContent='✓ Copied';
+    setTimeout(()=>btn.textContent=orig,1200)
+  });
+}
+</script>
+
+</body>
+</html>
