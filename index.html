@@ -3,326 +3,374 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>Chaos Intelligence Terminal</title>
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<title>Chaos Intelligence Terminal v5</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
   :root {
-    --background: #06070a;
-    --card: rgba(15, 17, 23, 0.7);
-    --border: #1e212b;
-    --foreground: #f8fafc;
+    --bg: #030407;
+    --sidebar: #06070a;
+    --card: #0a0b10;
+    --border: #141720;
+    --text: #e2e8f0;
     --muted: #64748b;
-    --chaos-green: #00e5a0;
-    --chaos-red: #ef4444;
-    --chaos-yellow: #facc15;
-    --chaos-orange: #f97316;
-    --chaos-purple: #a855f7;
-    --chaos-cyan: #06b6d4;
+    --green: #00e5a0;
+    --green-dark: #004d36;
+    --red: #ef4444;
+    --orange: #f97316;
+    --purple: #8b5cf6;
+    --blue: #3b82f6;
   }
   
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body { 
     font-family: 'Space Grotesk', sans-serif;
-    background-color: var(--background);
-    color: var(--foreground);
-    display: flex;
-    height: 100vh;
-    overflow: hidden;
+    background-color: var(--bg); color: var(--text);
+    display: flex; height: 100vh; overflow: hidden;
   }
   .mono { font-family: 'JetBrains Mono', monospace; }
   
+  /* Utilities */
+  .up { color: var(--green); } .down { color: var(--red); }
+  .flex { display: flex; } .col { flex-direction: column; }
+  .items-center { align-items: center; } .justify-between { justify-content: space-between; }
+  
   /* Layout */
   .sidebar {
-    width: 224px;
-    background: rgba(10, 11, 15, 0.5);
-    backdrop-filter: blur(12px);
-    border-right: 1px solid var(--border);
-    display: flex;
-    flex-direction: column;
-    z-index: 10;
+    width: 240px; background: var(--sidebar); border-right: 1px solid var(--border);
+    display: flex; flex-direction: column;
   }
   .brand {
-    height: 56px;
-    display: flex;
-    align-items: center;
-    padding: 0 20px;
-    border-bottom: 1px solid var(--border);
-    gap: 12px;
+    padding: 24px 20px; display: flex; align-items: center; gap: 12px;
   }
-  .brand-logo {
-    width: 28px; height: 28px; border-radius: 4px;
-    background: rgba(0, 229, 160, 0.1);
-    border: 1px solid rgba(0, 229, 160, 0.3);
-    display: flex; align-items: center; justify-content: center;
-    color: var(--chaos-green);
-  }
-  .nav { flex: 1; padding: 16px 8px; display: flex; flex-direction: column; gap: 4px; }
-  .nav-item {
-    display: flex; align-items: center; gap: 12px; padding: 10px 12px;
-    border-radius: 6px; color: var(--muted); cursor: pointer;
-    transition: all 0.2s; font-size: 14px; font-weight: 500;
-  }
-  .nav-item:hover { color: var(--foreground); background: rgba(255,255,255,0.05); }
-  .nav-item.active {
-    color: var(--chaos-green);
-    background: rgba(0, 229, 160, 0.1);
-    border: 1px solid rgba(0, 229, 160, 0.2);
-  }
+  .brand-logo { color: var(--green); border: 1px solid rgba(0,229,160,0.3); padding: 4px; border-radius: 4px; background: rgba(0,229,160,0.1); }
   
-  .main-content {
-    flex: 1; display: flex; flex-direction: column; overflow: hidden;
+  .nav { padding: 12px; flex: 1; }
+  .nav-item {
+    display: flex; align-items: center; gap: 12px; padding: 12px 16px; margin-bottom: 4px;
+    border-radius: 8px; color: var(--muted); font-size: 14px; font-weight: 500; cursor: pointer;
   }
+  .nav-item.active { background: rgba(0,229,160,0.05); color: var(--green); border: 1px solid rgba(0,229,160,0.1); }
+  
+  .main { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
   
   /* Ticker */
   .ticker {
-    height: 36px;
-    background: rgba(15, 17, 23, 0.4);
-    border-bottom: 1px solid var(--border);
-    display: flex; align-items: center; overflow: hidden;
-    position: relative; white-space: nowrap;
+    height: 40px; background: var(--sidebar); border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; padding: 0 16px; overflow: hidden;
   }
-  .ticker-track { display: flex; animation: scroll 30s linear infinite; }
-  @keyframes scroll { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
-  .ticker-item {
-    padding: 0 16px; border-right: 1px solid rgba(255,255,255,0.05);
-    display: flex; align-items: center; gap: 6px; font-size: 12px;
-  }
-  
-  /* Utilities */
-  .up { color: var(--chaos-green); }
-  .down { color: var(--chaos-red); }
-  .pulse-dot { animation: pulse 2s infinite; }
-  @keyframes pulse { 0% { opacity: 1; box-shadow: 0 0 0 0 rgba(0, 229, 160, 0.4); } 70% { opacity: 0.5; box-shadow: 0 0 0 4px rgba(0, 229, 160, 0); } 100% { opacity: 1; } }
-  
-  .flex { display: flex; } .items-center { align-items: center; } .gap-2 { gap: 8px; } .justify-between { justify-content: space-between; }
+  .ticker-track { display: flex; animation: slide 40s linear infinite; white-space: nowrap; }
+  @keyframes slide { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+  .t-item { padding: 0 16px; border-right: 1px solid var(--border); font-size: 12px; display: inline-flex; gap: 6px; }
   
   /* Views */
-  .view { flex: 1; overflow-y: auto; padding: 24px; display: none; }
-  .view.active { display: block; animation: fade 0.3s ease; }
-  @keyframes fade { from { opacity: 0; } to { opacity: 1; } }
+  .view { flex: 1; padding: 24px; overflow-y: auto; display: none; }
+  .view.active { display: block; animation: fade 0.3s; }
+  @keyframes fade { from{opacity:0;} to{opacity:1;} }
   
-  /* Grid & Cards */
-  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-  .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
-  .card {
-    background: var(--card); border: 1px solid var(--border);
-    border-radius: 12px; padding: 20px;
+  /* Header */
+  .header { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 24px; }
+  .title { font-size: 20px; font-weight: 600; display: flex; align-items: center; gap: 10px; }
+  
+  /* Top Stats Grid */
+  .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 24px; }
+  .stat-card {
+    background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 16px;
   }
+  .s-label { font-size: 12px; color: var(--muted); margin-bottom: 8px; font-family: 'JetBrains Mono'; }
+  .s-val { font-size: 24px; font-weight: 700; margin-bottom: 4px; }
+  .s-sub { font-size: 11px; color: var(--muted); }
   
-  /* Stats */
-  .stat-box {
-    background: rgba(10, 11, 15, 0.5); padding: 12px;
-    border-radius: 8px; border: 1px solid var(--border); text-align: center;
+  /* Main Columns */
+  .main-grid { display: grid; grid-template-columns: 1fr 1.2fr 1fr; gap: 16px; height: 320px; }
+  .card-box {
+    background: var(--card); border: 1px solid var(--border); border-radius: 8px;
+    display: flex; flex-direction: column; padding: 16px; position: relative;
   }
-  .stat-label { font-size: 9px; color: var(--muted); font-family: 'JetBrains Mono'; margin-bottom: 4px; }
-  .stat-val { font-size: 14px; font-weight: 700; font-family: 'JetBrains Mono'; }
-  .stat-val.large { font-size: 24px; }
-
-  /* Agent UI */
-  .agent-row { display: flex; align-items: center; gap: 10px; padding: 8px; border-radius: 6px; transition: background 0.2s; }
-  .agent-row:hover { background: rgba(255,255,255,0.05); }
-  .agent-icon { width: 24px; height: 24px; border-radius: 4px; border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; background: rgba(0,0,0,0.2); }
+  .box-title { font-size: 11px; color: var(--muted); font-family: 'JetBrains Mono'; letter-spacing: 0.5px; margin-bottom: 16px; display: flex; justify-content: space-between; }
   
-  /* CVX SVG Gauge */
-  .gauge-container { display: flex; justify-content: center; margin: 24px 0; }
+  /* CVX Gauge */
+  .gauge-wrap { position: relative; width: 100%; height: 200px; display: flex; justify-content: center; align-items: center; }
+  .gauge-svg { width: 180px; height: 180px; transform: rotate(-90deg); }
+  .gauge-bg { fill: none; stroke: var(--border); stroke-width: 12; }
+  .gauge-val { fill: none; stroke: var(--orange); stroke-width: 12; stroke-dasharray: 400; stroke-dashoffset: 400; stroke-linecap: round; transition: stroke-dashoffset 1.5s ease-out; }
+  .gauge-text { position: absolute; text-align: center; }
+  .g-num { font-size: 42px; font-weight: 700; line-height: 1; }
+  .g-label { font-size: 12px; font-weight: 600; font-family: 'JetBrains Mono'; margin-top: 4px; }
+  .gauge-legend { position: absolute; bottom: 20px; width: 80%; display: flex; justify-content: space-between; font-size: 9px; color: var(--muted); font-family: 'JetBrains Mono'; }
   
-  /* Typewriter Terminal */
-  .terminal-box {
-    background: #000; border: 1px solid var(--border); border-radius: 8px;
-    padding: 20px; font-family: 'JetBrains Mono', monospace; font-size: 13px; line-height: 1.6;
-    color: rgba(255,255,255,0.9);
-  }
+  /* History Line Chart Placeholder */
+  .chart-svg { width: 100%; height: 100%; }
+  .chart-line { fill: none; stroke: var(--orange); stroke-width: 2; vector-effect: non-scaling-stroke; filter: drop-shadow(0 4px 6px rgba(249,115,22,0.2)); }
+  .chart-bg { fill: url(#orange-grad); opacity: 0.1; }
+  .chart-stats { display: flex; justify-content: space-between; margin-top: auto; padding-top: 16px; border-top: 1px solid var(--border); }
+  .c-stat { text-align: center; }
+  .c-lbl { font-size: 10px; color: var(--muted); margin-bottom: 4px; font-family: 'JetBrains Mono'; }
+  .c-val { font-size: 16px; font-weight: 600; color: var(--orange); }
   
-  /* Badges */
-  .badge { padding: 4px 8px; border-radius: 4px; font-size: 10px; font-weight: 600; font-family: 'JetBrains Mono'; border: 1px solid transparent; }
-  .badge-outline { border-color: var(--border); color: var(--foreground); }
-  .badge-green { background: rgba(0,229,160,0.1); border-color: rgba(0,229,160,0.3); color: var(--chaos-green); }
+  /* Agent Pipeline List */
+  .agent-list { display: flex; flex-direction: column; gap: 8px; flex: 1; overflow-y: auto; }
+  .agent-item { display: flex; align-items: center; gap: 12px; padding: 8px 0; }
+  .a-icon { color: var(--muted); width: 16px; }
+  .a-info { flex: 1; }
+  .a-name { font-size: 13px; font-weight: 500; }
+  .a-desc { font-size: 11px; color: var(--muted); font-family: 'JetBrains Mono'; margin-top: 2px; }
+  .a-status { display: flex; align-items: center; gap: 6px; font-size: 10px; font-family: 'JetBrains Mono'; }
+  
+  /* Live dot */
+  .dot { width: 6px; height: 6px; border-radius: 50%; }
+  .dot.run { background: var(--green); box-shadow: 0 0 8px var(--green); }
+  .dot.idle { background: var(--border); }
+  
+  /* Briefing Box - below grid */
+  .briefing { margin-top: 16px; background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 20px; }
+  .b-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
+  .b-title { font-size: 14px; font-weight: 600; font-family: 'JetBrains Mono'; display: flex; align-items: center; gap: 8px; }
+  .b-btn { padding: 4px 12px; border: 1px solid var(--border); border-radius: 4px; background: transparent; color: var(--muted); font-family: 'JetBrains Mono'; font-size: 11px; cursor: pointer; }
+  .b-btn:hover { color: var(--text); border-color: var(--muted); }
+  .b-content { line-height: 1.6; font-size: 14px; color: rgba(226,232,240,0.9); }
 </style>
 </head>
 <body>
 
-<!-- SIDEBAR -->
 <aside class="sidebar">
   <div class="brand">
-    <div class="brand-logo">â²</div>
+    <div class="brand-logo">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 22h20L12 2z"/></svg>
+    </div>
     <div>
-      <div style="font-size:14px; font-weight:600; letter-spacing:0.5px">CHAOS</div>
-      <div style="font-size:10px; color:var(--muted); font-family:'JetBrains Mono'">INTELLIGENCE</div>
+      <div style="font-weight:700;letter-spacing:1px;font-size:14px">CHAOS</div>
+      <div style="font-size:10px;color:var(--muted);font-family:'JetBrains Mono'">INTELLIGENCE</div>
     </div>
   </div>
+  
   <div class="nav">
-    <div class="nav-item active" onclick="switchView('terminal')">Terminal Feed</div>
-    <div class="nav-item" onclick="switchView('cvx')">CVX Model</div>
-    <div class="nav-item" onclick="switchView('signals')">Signals Engine</div>
-  </div>
-  <div style="padding:16px; border-top: 1px solid var(--border);">
-    <div style="display:flex; align-items:center; gap:8px; font-size:12px; color:var(--muted); font-family:'JetBrains Mono'">
-      <div style="width:6px;height:6px;border-radius:50%;background:var(--chaos-green)" class="pulse-dot"></div>
-      ACTIVE SESSION
+    <div class="nav-item active" onclick="switchTab('terminal')">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+      Terminal
     </div>
+    <div class="nav-item" onclick="switchTab('cvx')">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
+      CVX Model
+    </div>
+    <div class="nav-item" onclick="switchTab('signals')">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
+      Signals
+    </div>
+    <div class="nav-item" onclick="switchTab('intel')">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 11a9 9 0 0 1 9 9"></path><path d="M4 4a16 16 0 0 1 16 16"></path><circle cx="5" cy="19" r="1"></circle></svg>
+      Market Intel
+    </div>
+  </div>
+  
+  <div style="padding: 16px; border-top: 1px solid var(--border); font-size: 11px; font-family: 'JetBrains Mono'; display: flex; align-items: center; gap: 8px;">
+    <div class="dot run"></div> LIVE FEED ACTIVE
   </div>
 </aside>
 
-<!-- MAIN APP -->
-<div class="main-content">
-  <!-- TICKER -->
+<div class="main">
+  <!-- Ticker -->
   <div class="ticker mono">
     <div class="ticker-track">
-      <!-- 2x duplicate for seamless loop -->
-      <div class="ticker-item"><span style="color:#64748b">BTC</span><span class="up">$66,790</span></div><div class="ticker-item"><span style="color:#64748b">ETH</span><span class="down">$2,003</span></div><div class="ticker-item"><span style="color:#64748b">SPX</span><span class="down">6,369</span></div><div class="ticker-item"><span style="color:#64748b">VIX</span><span class="up">31.05</span></div><div class="ticker-item"><span style="color:#64748b">DXY</span><span class="up">N/A</span></div><div class="ticker-item"><span style="color:#64748b">10Y</span><span class="down">4.440</span></div>
-      <div class="ticker-item"><span style="color:#64748b">BTC</span><span class="up">$66,790</span></div><div class="ticker-item"><span style="color:#64748b">ETH</span><span class="down">$2,003</span></div><div class="ticker-item"><span style="color:#64748b">SPX</span><span class="down">6,369</span></div><div class="ticker-item"><span style="color:#64748b">VIX</span><span class="up">31.05</span></div><div class="ticker-item"><span style="color:#64748b">DXY</span><span class="up">N/A</span></div><div class="ticker-item"><span style="color:#64748b">10Y</span><span class="down">4.440</span></div>
+      <div class="t-item"><span style="color:#64748b">BTC</span><span style="color:#e2e8f0">$66,762</span><span class="up">▲ 0.69%</span></div><div class="t-item"><span style="color:#64748b">ETH</span><span style="color:#e2e8f0">$2,002</span><span class="up">▲ 0.2%</span></div><div class="t-item"><span style="color:#64748b">SPX</span><span style="color:#e2e8f0">6,369</span><span class="down">▼ NaN%</span></div><div class="t-item"><span style="color:#64748b">VIX</span><span style="color:#e2e8f0">31.05</span><span class="up">▲ 0%</span></div><div class="t-item"><span style="color:#64748b">DXY</span><span style="color:#e2e8f0">N/A</span><span class="up">▲ 0%</span></div><div class="t-item"><span style="color:#64748b">10Y</span><span style="color:#e2e8f0">4.440</span><span class="up">▲ 0.02%</span></div>
+      <div class="t-item"><span style="color:#64748b">BTC</span><span style="color:#e2e8f0">$66,762</span><span class="up">▲ 0.69%</span></div><div class="t-item"><span style="color:#64748b">ETH</span><span style="color:#e2e8f0">$2,002</span><span class="up">▲ 0.2%</span></div><div class="t-item"><span style="color:#64748b">SPX</span><span style="color:#e2e8f0">6,369</span><span class="down">▼ NaN%</span></div><div class="t-item"><span style="color:#64748b">VIX</span><span style="color:#e2e8f0">31.05</span><span class="up">▲ 0%</span></div><div class="t-item"><span style="color:#64748b">DXY</span><span style="color:#e2e8f0">N/A</span><span class="up">▲ 0%</span></div><div class="t-item"><span style="color:#64748b">10Y</span><span style="color:#e2e8f0">4.440</span><span class="up">▲ 0.02%</span></div>
     </div>
   </div>
   
-  <!-- TERMINAL VIEW -->
   <div id="view-terminal" class="view active">
-    
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:24px;">
-      <div>
-        <h1 style="font-size:20px">Market Terminal</h1>
-        <div class="mono" style="font-size:12px;color:var(--muted)">UPDATED: 2026-03-29 11:59 UTC</div>
+    <!-- Header -->
+    <div class="header">
+      <div class="title">
+        <svg fill="none" stroke="var(--green)" stroke-width="2" width="20" height="20" viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
+        Market Terminal <span style="font-size:12px;color:var(--muted);font-weight:400;font-family:'JetBrains Mono'">v5.â</span>
       </div>
-      <div class="flex items-center gap-2">
-        <button id="ttsBtn" onclick="toggleTTS()" style="background:transparent;border:1px solid var(--chaos-green);color:var(--chaos-green);padding:6px 12px;border-radius:4px;cursor:pointer;font-family:'JetBrains Mono';font-size:11px;font-weight:600">ð LISTEN</button>
-        <div class="badge badge-green">VERIFIED</div>
+      <div class="flex items-center gap-3">
+        <div class="mono" style="font-size:11px;color:var(--muted)">UPD 2026-03-29 12:11 UTC</div>
+        <div style="display:flex;align-items:center;gap:6px;font-size:11px;font-weight:600;color:var(--green);font-family:'JetBrains Mono'">
+          <div class="dot run"></div> LIVE
+        </div>
       </div>
     </div>
     
-    <div style="display:grid; grid-template-columns: 280px 1fr; gap: 24px;">
-      
-      <!-- LEFT COLUMN -->
-      <div style="display:flex;flex-direction:column;gap:24px">
-        <!-- AGENTS -->
-        <div class="card">
-          <div style="font-size:12px;color:var(--muted);font-weight:600;margin-bottom:12px">AGENT STATUS</div>
-          
-          <div class="agent-row">
-            <div class="agent-icon"><span style="color:var(--chaos-cyan)">â</span></div>
-            <div style="flex:1"><div style="font-size:12px;font-weight:500">Market Data</div><div class="mono" style="font-size:10px;color:var(--muted)">Fetching order books</div></div>
-            <div class="mono" style="font-size:9px;color:var(--chaos-green)">RUNNING</div>
-          </div>
-          
-          <div class="agent-row">
-            <div class="agent-icon"><span style="color:var(--chaos-orange)">â</span></div>
-            <div style="flex:1"><div style="font-size:12px;font-weight:500">Fundamental</div><div class="mono" style="font-size:10px;color:var(--muted)">BULLISH Â· 70%</div></div>
-            <div class="mono" style="font-size:9px;color:var(--chaos-green)">DONE</div>
-          </div>
-          
-          <div class="agent-row">
-            <div class="agent-icon"><span style="color:var(--chaos-purple)">â</span></div>
-            <div style="flex:1"><div style="font-size:12px;font-weight:500">Technical</div><div class="mono" style="font-size:10px;color:var(--muted)">BEARISH Â· 70%</div></div>
-            <div class="mono" style="font-size:9px;color:var(--chaos-green)">DONE</div>
-          </div>
-          
-          <div class="agent-row">
-            <div class="agent-icon"><span style="color:var(--chaos-yellow)">â</span></div>
-            <div style="flex:1"><div style="font-size:12px;font-weight:500">Sentiment</div><div class="mono" style="font-size:10px;color:var(--muted)">BULLISH Â· 80%</div></div>
-            <div class="mono" style="font-size:9px;color:var(--chaos-green)">DONE</div>
-          </div>
-          
-          <div class="agent-row">
-            <div class="agent-icon"><span style="color:var(--chaos-green)">â</span></div>
-            <div style="flex:1"><div style="font-size:12px;font-weight:500">Supervisor (CVX)</div><div class="mono" style="font-size:10px;color:var(--muted)">Finalizing Synthesis</div></div>
-            <div class="mono" style="font-size:9px;color:var(--chaos-purple)">SYNTHESIZING</div>
-          </div>
-        </div>
-        
-        <!-- DASHBOARD -->
-        <div class="card">
-          <div style="font-size:12px;color:var(--muted);font-weight:600;margin-bottom:12px">MACRO SNAPSHOT</div>
-          <div class="grid-2">
-            <div class="stat-box"><div class="stat-label">CVX SCORE</div><div class="stat-val large" style="color:var(--chaos-yellow)">42</div><div class="stat-label" style="margin-top:4px">STRESSED</div></div>
-            <div class="stat-box"><div class="stat-label">FEAR</div><div class="stat-val large" style="color:var(--chaos-red)">50</div><div class="stat-label" style="margin-top:4px">INDEX</div></div>
-          </div>
-          <div class="grid-2" style="margin-top:16px">
-            <div><div class="mono text-muted" style="font-size:10px">SPX</div><div class="mono" style="font-size:14px">6,369</div></div>
-            <div><div class="mono text-muted" style="font-size:10px">VIX</div><div class="mono" style="font-size:14px">31.05</div></div>
-            <div style="margin-top:8px"><div class="mono text-muted" style="font-size:10px">DXY</div><div class="mono" style="font-size:14px">N/A</div></div>
-            <div style="margin-top:8px"><div class="mono text-muted" style="font-size:10px">10Y Yield</div><div class="mono" style="font-size:14px">4.440%</div></div>
-          </div>
-        </div>
+    <!-- Top Stats -->
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="s-label">CVX Score</div>
+        <div class="s-val" style="color:var(--orange)">42</div>
+        <div class="s-sub mono">STRESSED</div>
       </div>
-      
-      <!-- RIGHT COLUMN -->
-      <div style="display:flex;flex-direction:column;gap:24px">
-        <!-- OUTPUT -->
-        <div class="card terminal-box" id="briefing-box">
-          <div style="color:var(--chaos-green);margin-bottom:16px">âââââââââââââââââââââââââââââââââââââââââââââââââââââ<br>â CHAOS OVERRIDE DETECTED â DAILY BRIEFING INITIATED â<br>âââââââââââââââââââââââââââââââââââââââââââââââââââââ</div>
-          The market is showing mixed signals, with some indicators suggesting a bullish trend and others indicating a bearish trend, resulting in a neutral outlook.
-          <br><br>
-          <span style="color:var(--chaos-purple)">[ANALYSIS]</span><br>
-          The fundamental analysis suggests a bullish bias due to the low recession probability and strong Bitcoin dominance, while the technical analysis indicates a bearish trend due to the lackluster price action and high VIX.
-          <br><br>
-          <span style="color:var(--chaos-red)">[QUANT]</span><br>
-          The quantitative analysis shows a moderate fear level and a relatively stable VIX, which supports a neutral bias. The CVX score of 42 also suggests a cautious approach.
-          <br><br>
-          > <span style="font-style:italic">"The market is a complex system, and predicting its behavior is like trying to predict the path of a thrown stone in a stormy sea."</span>
-          <br><br>
-        </div>
-        
-        <!-- ACTIVE PLAYS -->
-        <div class="card">
-          <div style="font-size:12px;color:var(--muted);font-weight:600;margin-bottom:12px;font-family:'JetBrains Mono'">[ THE EDGE ]</div>
-          <div class="mono" style="font-size:13px"><span style="color:var(--chaos-red)">TRAP:</span> Overconfidence in a single market direction, ignoring the complexity and uncertainty of the market.</div>
-          <div class="mono" style="font-size:13px;margin-top:8px"><span style="color:var(--chaos-green)">REAL EDGE:</span> The ability to adapt to changing market conditions and adjust the investment strategy accordingly.</div>
-        </div>
-        
+      <div class="stat-card">
+        <div class="s-label">Win Rate</div>
+        <div class="s-val up">68%</div>
+        <div class="s-sub mono">90-day</div>
       </div>
-    
+      <div class="stat-card">
+        <div class="s-label">Active Signals</div>
+        <div class="s-val" style="color:var(--blue)">3</div>
+        <div class="s-sub mono">2 long Â· 1 short</div>
+      </div>
+      <div class="stat-card">
+        <div class="s-label">Agents Online</div>
+        <div class="s-val" style="color:var(--purple)">6/6</div>
+        <div class="s-sub mono">All systems go</div>
+      </div>
     </div>
+    
+    <!-- Main Grid -->
+    <div class="main-grid">
+      <!-- Card 1: Gauge -->
+      <div class="card-box">
+        <div class="box-title"><span>CHAOS VOLATILITY INDEX</span><span>CVX v1.0</span></div>
+        <div class="gauge-wrap">
+          <svg class="gauge-svg" viewBox="0 0 100 100">
+            <defs>
+              <linearGradient id="g-grad" x1="0%" y1="0%" x2="0%" y2="100%">
+                <stop offset="0%" stop-color="#00e5a0" />
+                <stop offset="50%" stop-color="#f97316" />
+                <stop offset="100%" stop-color="#ef4444" />
+              </linearGradient>
+            </defs>
+            <circle class="gauge-bg" cx="50" cy="50" r="40" stroke-dasharray="188 251" stroke-dashoffset="0" />
+            <circle class="gauge-val" id="cvxArc" cx="50" cy="50" r="40" stroke="url(#g-grad)" stroke-dasharray="188 251" stroke-dashoffset="188" />
+          </svg>
+          <div class="gauge-text">
+            <div class="g-num" style="color:var(--orange)">42</div>
+            <div class="g-label" style="color:var(--orange)">__CVX_REGIME__</div>
+          </div>
+          <div class="gauge-legend">
+            <span style="color:var(--green)">CALM</span>
+            <span style="color:var(--orange)">STRESSED</span>
+            <span style="color:var(--red)">CHAOS</span>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Card 2: History -->
+      <div class="card-box">
+        <div class="box-title"><span>CVX 30-DAY HISTORY</span><span>GARCH + EWMA</span></div>
+        <div style="flex:1; width:100%; position:relative; overflow:hidden">
+          <svg class="chart-svg" viewBox="0 0 400 150" preserveAspectRatio="none">
+            <defs>
+              <linearGradient id="orange-grad" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#f97316" stop-opacity="0.8"/>
+                <stop offset="100%" stop-color="#f97316" stop-opacity="0"/>
+              </linearGradient>
+            </defs>
+            <!-- Mock realistic CVX data -->
+            <path class="chart-bg" d="M0,150 L0,70 Q20,60 40,80 T80,60 T120,90 T160,70 T200,85 T240,65 T280,75 T320,55 T360,60 T400,45 L400,150 Z" />
+            <path class="chart-line" d="M0,70 Q20,60 40,80 T80,60 T120,90 T160,70 T200,85 T240,65 T280,75 T320,55 T360,60 T400,45" />
+          </svg>
+        </div>
+        <div class="chart-stats">
+          <div class="c-stat"><div class="c-lbl">AVG</div><div class="c-val">37</div></div>
+          <div class="c-stat"><div class="c-lbl">MIN</div><div class="c-val">28</div></div>
+          <div class="c-stat"><div class="c-lbl">MAX</div><div class="c-val">47</div></div>
+        </div>
+      </div>
+      
+      <!-- Card 3: Agents -->
+      <div class="card-box">
+        <div class="box-title"><span>MULTI-AGENT PIPELINE</span><span style="color:var(--green)">6/6 ONLINE</span></div>
+        <div class="agent-list">
+          <!-- Data -->
+          <div class="agent-item">
+            <div class="a-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg></div>
+            <div class="a-info"><div class="a-name">Market Data Agent</div><div class="a-desc">Fetching BTC/ETH order books</div></div>
+            <div class="a-status" style="color:var(--green)"><div class="dot run"></div> RUNNING</div>
+          </div>
+          <!-- Sentiment -->
+          <div class="agent-item">
+            <div class="a-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg></div>
+            <div class="a-info"><div class="a-name">Sentiment Agent</div><div class="a-desc">BULLISH Â· 80%</div></div>
+            <div class="a-status" style="color:var(--green)"><div class="dot run"></div> RUNNING</div>
+          </div>
+          <!-- Technical -->
+          <div class="agent-item">
+            <div class="a-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"></polyline><polyline points="16 7 22 7 22 13"></polyline></svg></div>
+            <div class="a-info"><div class="a-name">Technical Analyst</div><div class="a-desc">NEUTRAL Â· 50%</div></div>
+            <div class="a-status" style="color:var(--muted)"><div class="dot idle"></div> IDLE</div>
+          </div>
+          <!-- Fundamental -->
+          <div class="agent-item">
+            <div class="a-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg></div>
+            <div class="a-info"><div class="a-name">Fundamental Agent</div><div class="a-desc">NEUTRAL Â· 50%</div></div>
+            <div class="a-status" style="color:var(--muted)"><div class="dot idle"></div> IDLE</div>
+          </div>
+          <!-- Risk -->
+          <div class="agent-item">
+            <div class="a-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg></div>
+            <div class="a-info"><div class="a-name">Risk & Portfolio</div><div class="a-desc">Drawdown stress test</div></div>
+            <div class="a-status" style="color:var(--green)"><div class="dot run"></div> RUNNING</div>
+          </div>
+          <!-- Supervisor -->
+          <div class="agent-item">
+            <div class="a-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg></div>
+            <div class="a-info"><div class="a-name">Supervisor (CVX)</div><div class="a-desc">Consensus generation</div></div>
+            <div class="a-status" style="color:var(--muted)"><div class="dot idle"></div> IDLE</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Briefing Output -->
+    <div class="briefing">
+      <div class="b-head">
+        <div class="b-title">AI Daily Briefing <span class="badge badge-green" style="font-size:10px;padding:2px 6px">SUPERVISOR SYNTHESIS</span></div>
+        <div style="display:flex;gap:8px">
+          <button class="b-btn" onclick="toggleTTS()" id="ttsBtn">ð Listen</button>
+          <button class="b-btn">Regenerate</button>
+        </div>
+      </div>
+      <div class="b-content" id="briefing-box">
+        <b>**Market Update**</b> — Cross-asset analysis underway. <i style="color:#64748b">"The market speaks in contradictions."</i>
+      </div>
+    </div>
+    
   </div>
   
   <div id="view-cvx" class="view">
-    <div style="display:flex;justify-content:center;align-items:center;height:100%;color:var(--muted)">
-      <div style="text-align:center">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="width:48px;height:48px;margin-bottom:16px"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
-        <div style="font-size:18px">CVX Model Rendering Engine Offline</div>
-        <div class="mono" style="font-size:12px;margin-top:8px">Visualizer package pending. Score: 42</div>
-      </div>
-    </div>
+    <div style="display:flex;justify-content:center;align-items:center;height:100%;color:var(--muted);font-family:'JetBrains Mono'">[ CVX MODULE PENDING ]</div>
   </div>
-  
   <div id="view-signals" class="view">
-    <div style="display:flex;justify-content:center;align-items:center;height:100%;color:var(--muted)">
-      <div style="text-align:center">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="width:48px;height:48px;margin-bottom:16px"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
-        <div style="font-size:18px">Cryptography Verification Running</div>
-        <div class="mono" style="font-size:12px;margin-top:8px">Signal hash building...</div>
-      </div>
-    </div>
+    <div style="display:flex;justify-content:center;align-items:center;height:100%;color:var(--muted);font-family:'JetBrains Mono'">[ SIGNALS ENGINE PENDING ]</div>
+  </div>
+  <div id="view-intel" class="view">
+    <div style="display:flex;justify-content:center;align-items:center;height:100%;color:var(--muted);font-family:'JetBrains Mono'">[ INTEL FEED PENDING ]</div>
   </div>
 
 </div>
 
 <script>
-  function switchView(id) {
-    document.querySelectorAll('.view').forEach(e => e.classList.remove('active'));
-    document.querySelectorAll('.nav-item').forEach(e => e.classList.remove('active'));
-    document.getElementById('view-'+id).classList.add('active');
+  function switchTab(id) {
+    document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+    document.querySelectorAll('.nav-item').forEach(v => v.classList.remove('active'));
+    document.getElementById('view-' + id).classList.add('active');
     event.currentTarget.classList.add('active');
   }
+
+  // Animate Gauge on load
+  setTimeout(() => {
+    const arc = document.getElementById('cvxArc');
+    if(arc) {
+      // 188 length. 0 mapping = 188 (0%), 100 mapping = 0 (100%)
+      const score = 42;
+      const offset = 188 - (188 * (score / 100));
+      arc.style.strokeDashoffset = Math.max(0, offset);
+    }
+  }, 100);
 
   // Text-To-Speech Setup
   let synth = window.speechSynthesis;
   let isSpeaking = false;
-  
   function toggleTTS() {
     if (isSpeaking) {
       synth.cancel();
-      document.getElementById('ttsBtn').innerText = "ð LISTEN";
+      document.getElementById('ttsBtn').innerText = "ð Listen";
       isSpeaking = false;
     } else {
       let text = document.getElementById('briefing-box').innerText;
-      // Strip UI brackets
-      text = text.replace(/\s*\[.*?\]\s*/g, ' ').replace(/[âââââ>"]/g, '').trim();
       let utterance = new SpeechSynthesisUtterance(text);
-      
-      utterance.onend = () => {
-        document.getElementById('ttsBtn').innerText = "ð LISTEN";
-        isSpeaking = false;
-      };
-      
-      document.getElementById('ttsBtn').innerText = "â¹ STOP";
+      utterance.onend = () => { document.getElementById('ttsBtn').innerText = "ð Listen"; isSpeaking = false; };
+      document.getElementById('ttsBtn').innerText = "â¹ Stop";
       synth.speak(utterance);
       isSpeaking = true;
     }
