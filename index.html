@@ -16,7 +16,11 @@
 <meta name="twitter:title" content="Chaos Intelligence — Market Update">
 <meta name="twitter:description" content="The market speaks in contradictions.">
 <meta name="theme-color" content="#08080c">
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"Market Update","description":"The market speaks in contradictions.","author":{"@type":"Organization","name":"Chaos Intelligence AI"},"publisher":{"@type":"Organization","name":"Chaos Intelligence"},"mainEntityOfPage":"https://chaos.sumanthworks.com","url":"https://chaos.sumanthworks.com"}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"Market Update","description":"The market speaks in contradictions.","author":{"@type":"Organization","name":"Chaos Intelligence AI"},"publisher":{"@type":"Organization","name":"Chaos Intelligence"},"datePublished":"2026-04-06T07:53:50.081Z","dateModified":"2026-04-06T07:53:50.081Z","mainEntityOfPage":"https://chaos.sumanthworks.com","url":"https://chaos.sumanthworks.com"}
+// v8: Animate conviction bars on scroll reveal
+setTimeout(function(){document.querySelectorAll('.agent-conf-fill').forEach(function(el){var w=el.style.width;el.style.width='0';setTimeout(function(){el.style.width=w},200)})},1800);
+
+</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300;1,400&family=JetBrains+Mono:wght@300;400;700&family=Barlow+Condensed:wght@300;400;600;700;900&display=swap" rel="stylesheet">
@@ -344,30 +348,67 @@ body.light .hash-badge{background:rgba(0,180,90,.06);border-color:rgba(0,180,90,
 .debate-badge.active{background:rgba(245,166,35,.1);border:1px solid var(--gold);color:var(--gold)}
 .debate-badge.consensus{background:rgba(0,255,136,.08);border:1px solid var(--green);color:var(--green)}
 
+
+/* v8: Agent Consensus Grid — 2x2 with conviction bars */
+.agent-panel-v8{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin:16px 0}
+@media(max-width:600px){.agent-panel-v8{grid-template-columns:1fr}}
+.agent-card-v8{padding:16px;border-radius:12px;border:1px solid var(--s3);background:var(--s1);text-align:center;transition:all .3s}
+.agent-card-v8:hover{border-color:var(--gold);transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,.15)}
+.agent-card-v8 .agent-name{font-family:var(--font-mono);font-size:.5rem;letter-spacing:1.5px;color:var(--muted);margin-bottom:8px;text-transform:uppercase}
+.agent-card-v8 .agent-bias{font-family:var(--font-mono);font-size:.85rem;font-weight:700;letter-spacing:1px;margin-bottom:8px}
+.agent-conf-bar{width:100%;height:4px;background:var(--s3);border-radius:2px;overflow:hidden;margin-bottom:6px}
+.agent-conf-fill{height:100%;border-radius:2px;transition:width 1.5s ease;width:0}
+.agent-card-v8 .agent-conf{font-size:.42rem;color:var(--muted);margin-bottom:6px;font-family:var(--font-mono);letter-spacing:1px}
+.agent-card-v8 .agent-thesis{font-size:.52rem;color:var(--ink2);line-height:1.5;font-family:var(--font-body)}
+.agent-card-v8.agent-veto{border-color:var(--red);background:rgba(232,57,74,.04);animation:pulse 2s infinite}
+.veto-badge{margin-top:8px;padding:4px 10px;background:var(--red);color:#fff;font-family:var(--font-mono);font-size:.4rem;letter-spacing:1.5px;border-radius:4px;font-weight:700;display:inline-block}
+/* v8: Alpha Disconnect Banner */
+.alpha-disconnect{display:flex;align-items:center;gap:12px;padding:14px 20px;margin-bottom:20px;background:linear-gradient(135deg,rgba(157,108,248,.08),rgba(76,201,240,.06));border:1.5px solid rgba(157,108,248,.4);border-radius:12px;animation:alphaGlow 2s ease infinite alternate}
+@keyframes alphaGlow{0%{box-shadow:0 0 8px rgba(157,108,248,.15)}100%{box-shadow:0 0 24px rgba(157,108,248,.35)}}
+.alpha-icon{font-size:1.4rem}
+.alpha-text{font-family:var(--font-mono);font-size:.55rem;font-weight:800;letter-spacing:2px;color:var(--purple)}
+.alpha-sub{font-family:var(--font-mono);font-size:.4rem;color:var(--muted);letter-spacing:.5px}
+body.light .alpha-disconnect{background:linear-gradient(135deg,rgba(157,108,248,.12),rgba(76,201,240,.08));border-color:rgba(157,108,248,.5)}
+body.light .agent-card-v8{background:rgba(0,0,0,.02);border-color:rgba(0,0,0,.1)}
+body.light .agent-card-v8:hover{border-color:#9a6b00;box-shadow:0 8px 24px rgba(0,0,0,.08)}
+body.light .agent-card-v8.agent-veto{background:rgba(232,57,74,.06);border-color:rgba(232,57,74,.4)}
+
 </style>
 </head>
 <body>
 <div id="progress"></div>
 <div id="boot"><div class="boot-ey">INITIALIZING WAR ROOM</div><div class="boot-logo">CHAOS<em>.</em></div><div class="boot-bar-w"><div class="boot-bar"></div></div></div>
 
-<div class="ticker"><div class="tk-lbl"><span class="tk-dot"></span>LIVE</div><div class="tk-scroll"><div class="tk-inner"><span class="tk">FEAR <span class="v neut">50</span></span><span class="tk">NEUTRAL</span><span class="tk">BTC <span class="v bull">$67,612</span></span><span class="tk">24H <span class="v bull">+0.13%</span></span><span class="tk">SIGNAL <span class="v neut">NEUTRAL</span></span><span class="tk">CONF <span class="v neut">50%</span></span><span class="tk">FORCES <span class="v bear">0/9</span></span><span class="tk">10Y <span class="v neut">4.342%</span></span><span class="tk">DXY <span class="v neut">100.46</span></span><span class="tk">TUE, MAR 31, 2026</span><span class="tk">FEAR <span class="v neut">50</span></span><span class="tk">NEUTRAL</span><span class="tk">BTC <span class="v bull">$67,612</span></span><span class="tk">24H <span class="v bull">+0.13%</span></span><span class="tk">SIGNAL <span class="v neut">NEUTRAL</span></span><span class="tk">CONF <span class="v neut">50%</span></span><span class="tk">FORCES <span class="v bear">0/9</span></span><span class="tk">10Y <span class="v neut">4.342%</span></span><span class="tk">DXY <span class="v neut">100.46</span></span><span class="tk">TUE, MAR 31, 2026</span></div></div></div>
+<div class="ticker"><div class="tk-lbl"><span class="tk-dot"></span>LIVE</div><div class="tk-scroll"><div class="tk-inner"><span class="tk">FEAR <span class="v neut">50</span></span><span class="tk">NEUTRAL</span><span class="tk">BTC <span class="v bull">$69,169</span></span><span class="tk">24H <span class="v bull">+3.62%</span></span><span class="tk">SIGNAL <span class="v neut">NEUTRAL</span></span><span class="tk">CONF <span class="v neut">50%</span></span><span class="tk">FORCES <span class="v bear">0/9</span></span><span class="tk">10Y <span class="v neut">N/A%</span></span><span class="tk">DXY <span class="v neut">99.94</span></span><span class="tk">MON, APR 6, 2026</span><span class="tk">FEAR <span class="v neut">50</span></span><span class="tk">NEUTRAL</span><span class="tk">BTC <span class="v bull">$69,169</span></span><span class="tk">24H <span class="v bull">+3.62%</span></span><span class="tk">SIGNAL <span class="v neut">NEUTRAL</span></span><span class="tk">CONF <span class="v neut">50%</span></span><span class="tk">FORCES <span class="v bear">0/9</span></span><span class="tk">10Y <span class="v neut">N/A%</span></span><span class="tk">DXY <span class="v neut">99.94</span></span><span class="tk">MON, APR 6, 2026</span></div></div></div>
 
-<div class="wrap"><header class="hdr"><div class="hdr-top"><div class="brand">CHAOS<em>.</em></div><div class="hdr-r"><div class="live-b"><span class="live-d"></span>LIVE BRIEF</div></div></div><div class="dateline"><span>TUE, MAR 31, 2026 · 06:05 UTC · CHAOS INTELLIGENCE</span><div style="display:flex;align-items:center;gap:10px"><span class="ed-badge">MORNING BRIEF</span><button class="th-tog" onclick="toggleTheme()" aria-label="Toggle theme"><div class="th-track"><div class="th-thumb"></div></div><span id="th-lbl">DARK</span></button></div></div><div id="world-clock-bar" class="world-clock-bar" style="display:none"></div></header>
+<div class="wrap"><header class="hdr"><div class="hdr-top"><div class="brand">CHAOS<em>.</em></div><div class="hdr-r"><div class="live-b"><span class="live-d"></span>LIVE BRIEF</div></div></div><div class="dateline"><span>MON, APR 6, 2026 · 07:53 UTC · CHAOS INTELLIGENCE</span><div style="display:flex;align-items:center;gap:10px"><span class="ed-badge">MORNING BRIEF</span><button class="th-tog" onclick="toggleTheme()" aria-label="Toggle theme"><div class="th-track"><div class="th-thumb"></div></div><span id="th-lbl">DARK</span></button></div></div><div id="world-clock-bar" class="world-clock-bar" style="display:none"></div></header>
 <!-- VERIFIED SIGNAL HASH -->
 <div class="hash-badge rv">
   <span class="hash-icon">🔐</span>
   <span class="hash-label">VERIFIED</span>
-  <span class="hash-val">ad0b3c9be0a7b47501ba42770071e824</span>
+  <span class="hash-val">0053dda4790d77514826434e772d9039</span>
 </div></div>
 
-<div class="wrap"><div class="vitals"><div class="vital"><div class="vv neut">50</div><div class="vl">Fear Index</div><div class="vd up">▼ -1 vs yest</div></div><div class="vital"><div class="vv bull">$67,612</div><div class="vl">BTC/USD</div><div class="vd bull">24h ▲+0.13%</div></div><div class="vital"><div class="vv neut">NEUTRAL</div><div class="vl">Signal</div><div class="vd flat">— AI model</div></div><div class="vital"><div class="vv neut">50%</div><div class="vl">Confidence</div><div class="vd flat">— v4.1</div></div></div></div>
+<div class="wrap"><div class="vitals"><div class="vital"><div class="vv neut">50</div><div class="vl">Fear Index</div><div class="vd up">▼ -1 vs yest</div></div><div class="vital"><div class="vv bull">$69,169</div><div class="vl">BTC/USD</div><div class="vd bull">24h ▲+3.62%</div></div><div class="vital"><div class="vv neut">NEUTRAL</div><div class="vl">Signal</div><div class="vd flat">— AI model</div></div><div class="vital"><div class="vv neut">50%</div><div class="vl">Confidence</div><div class="vd flat">— v4.1</div></div></div></div>
 
 <main class="wrap"><div class="main">
 <article>
 <div class="ed-tag">TODAY'S BRIEFING · NYC</div>
+<!-- CHAOS HERO IMAGE (Pollinations.AI — Free, No Key) -->
+<figure style="margin:0 0 32px;border-radius:12px;overflow:hidden;position:relative;height:280px;background:var(--s2);">
+  <img id="hero-img" src="https://image.pollinations.ai/prompt/cinematic%20financial%20war%20room%2C%20dramatic%20dark%20atmosphere%2C%20The%20market%20speaks%20in%20contradictions.%2C%20Bloomberg%20terminal%20aesthetic%2C%20moody%20lighting%2C%20ultra-realistic%2C%2016%3A9?width=1200&height=400&model=flux&seed=50&nologo=true" alt="Market Update"
+    style="width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity 1s ease;"
+    onload="this.style.opacity=1;"
+    onerror="this.parentElement.style.display='none';">
+  <div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(8,8,12,.9) 0%,rgba(8,8,12,.2) 60%,transparent 100%);"></div>
+  <div style="position:absolute;bottom:16px;left:20px;right:20px;">
+    <div style="font-family:var(--font-mono);font-size:.4rem;letter-spacing:3px;color:rgba(245,166,35,.7);margin-bottom:6px;">AI GENERATED · CHAOS INTELLIGENCE</div>
+    <div style="font-family:var(--font-body);font-size:clamp(.9rem,2.5vw,1.15rem);font-style:italic;color:rgba(240,236,228,.95);line-height:1.4;">&ldquo;The market speaks in contradictions.&rdquo;</div>
+  </div>
+</figure>
 <h1 class="hl">Market Update</h1>
 <div class="sig-row"><span class="sig neut">NEUTRAL</span><span class="ts-badge up">🟢 THIS WEEK</span><span class="conf">50% AI CONFIDENCE · 0/9 FORCES</span></div>
-<div class="upd"><span>●</span> 06:05 UTC · ∞ BRAIN + LIVE DATA</div>
+<div class="upd"><span>●</span> 07:53 UTC · ∞ BRAIN + LIVE DATA</div>
 
 <!-- SVG FEAR GAUGE -->
 <section class="rv">
@@ -389,9 +430,9 @@ body.light .hash-badge{background:rgba(0,180,90,.06);border-color:rgba(0,180,90,
 <button class="cx-btn active" onclick="setCx('analyst',this)"><span class="cx-n">Analyst</span><span class="cx-sub">Intermediate · 5 min</span></button>
 <button class="cx-btn" onclick="setCx('quant',this)"><span class="cx-n">Quant</span><span class="cx-sub">Advanced · 7 min</span></button>
 </div>
-<div class="pane" id="pane-eli5"><div class="brief"><div class="brief-meta"><span class="brief-tag eli5">ELI5 — FOR EVERYONE</span><span class="brief-tag time">⏱ 3 MIN</span><button class="voice-btn" onclick="chaosSpeak('pane-eli5',this)" title="Listen to ELI5 briefing" aria-label="Play ELI5 audio"><span class="v-icon">🔊</span> LISTEN</button></div><p>Cross-asset analysis underway.</p><div class="brief-metrics"><div class="bm"><div class="bm-v">50</div><div class="bm-l">Fear Index</div></div><div class="bm"><div class="bm-v">$67,612</div><div class="bm-l">Bitcoin</div></div><div class="bm"><div class="bm-v">4.342%</div><div class="bm-l">10Y Yield</div></div></div></div></div>
-<div class="pane active" id="pane-analyst"><div class="brief"><div class="brief-meta"><span class="brief-tag analyst">ANALYST — INTERMEDIATE</span><span class="brief-tag time">⏱ 5 MIN</span><button class="voice-btn" onclick="chaosSpeak('pane-analyst',this)" title="Listen to Analyst briefing" aria-label="Play Analyst audio"><span class="v-icon">🔊</span> LISTEN</button></div><p>Cross-asset analysis underway.</p><div class="brief-metrics"><div class="bm"><div class="bm-v">4.342%</div><div class="bm-l">10Y Treasury</div></div><div class="bm"><div class="bm-v">100.46</div><div class="bm-l">DXY</div></div><div class="bm"><div class="bm-v">6,344</div><div class="bm-l">S&P 500</div></div></div></div></div>
-<div class="pane" id="pane-quant"><div class="brief"><div class="brief-meta"><span class="brief-tag quant">QUANT — ADVANCED</span><span class="brief-tag time">⏱ 7 MIN</span><button class="voice-btn" onclick="chaosSpeak('pane-quant',this)" title="Listen to Quant briefing" aria-label="Play Quant audio"><span class="v-icon">🔊</span> LISTEN</button></div><p>Cross-asset analysis underway.</p><div class="brief-metrics"><div class="bm"><div class="bm-v">30.61</div><div class="bm-l">VIX</div></div><div class="bm"><div class="bm-v">—</div><div class="bm-l">ETH</div></div><div class="bm"><div class="bm-v">50%</div><div class="bm-l">AI Confidence</div></div></div></div></div>
+<div class="pane" id="pane-eli5"><div class="brief"><div class="brief-meta"><span class="brief-tag eli5">ELI5 — FOR EVERYONE</span><span class="brief-tag time">⏱ 3 MIN</span><button class="voice-btn" onclick="chaosSpeak('pane-eli5',this)" title="Listen to ELI5 briefing" aria-label="Play ELI5 audio"><span class="v-icon">🔊</span> LISTEN</button></div><p>Cross-asset analysis underway.</p><div class="brief-metrics"><div class="bm"><div class="bm-v">50</div><div class="bm-l">Fear Index</div></div><div class="bm"><div class="bm-v">$69,169</div><div class="bm-l">Bitcoin</div></div><div class="bm"><div class="bm-v">N/A%</div><div class="bm-l">10Y Yield</div></div></div></div></div>
+<div class="pane active" id="pane-analyst"><div class="brief"><div class="brief-meta"><span class="brief-tag analyst">ANALYST — INTERMEDIATE</span><span class="brief-tag time">⏱ 5 MIN</span><button class="voice-btn" onclick="chaosSpeak('pane-analyst',this)" title="Listen to Analyst briefing" aria-label="Play Analyst audio"><span class="v-icon">🔊</span> LISTEN</button></div><p>Cross-asset analysis underway.</p><div class="brief-metrics"><div class="bm"><div class="bm-v">N/A%</div><div class="bm-l">10Y Treasury</div></div><div class="bm"><div class="bm-v">99.94</div><div class="bm-l">DXY</div></div><div class="bm"><div class="bm-v">6,583</div><div class="bm-l">S&P 500</div></div></div></div></div>
+<div class="pane" id="pane-quant"><div class="brief"><div class="brief-meta"><span class="brief-tag quant">QUANT — ADVANCED</span><span class="brief-tag time">⏱ 7 MIN</span><button class="voice-btn" onclick="chaosSpeak('pane-quant',this)" title="Listen to Quant briefing" aria-label="Play Quant audio"><span class="v-icon">🔊</span> LISTEN</button></div><p>Cross-asset analysis underway.</p><div class="brief-metrics"><div class="bm"><div class="bm-v">24.90</div><div class="bm-l">VIX</div></div><div class="bm"><div class="bm-v">$2,138</div><div class="bm-l">ETH</div></div><div class="bm"><div class="bm-v">50%</div><div class="bm-l">AI Confidence</div></div></div></div></div>
 </section>
 </article>
 
@@ -399,30 +440,49 @@ body.light .hash-badge{background:rgba(0,180,90,.06);border-color:rgba(0,180,90,
 <section class="forces rv"><div class="sec-title">ACTIVE MACRO FORCES</div><div class="forces-grid"><div class="fc off"><span class="fc-dot"></span>💰 <span class="fc-n">MONEY</span><div class="fc-tip"><div class="ftt off">💰 MONEY</div><div class="ftd">Central bank policy, interest rates, and global liquidity.</div><div class="fts off">○ DORMANT — Monetary policy transmission active</div></div></div><div class="fc off"><span class="fc-dot"></span>🤖 <span class="fc-n">TECH</span><div class="fc-tip"><div class="ftt off">🤖 TECH</div><div class="ftd">AI development, semiconductor supply chains, digital infrastructure.</div><div class="fts off">○ DORMANT — Chip war + AI investment cycle dominant</div></div></div><div class="fc off"><span class="fc-dot"></span>⚡ <span class="fc-n">ENERGY</span><div class="fc-tip"><div class="ftt off">⚡ ENERGY</div><div class="ftd">Oil, gas, renewable transition, energy geopolitics.</div><div class="fts off">○ DORMANT — Oil markets stable, no acute supply shock</div></div></div><div class="fc off"><span class="fc-dot"></span>🏛️ <span class="fc-n">POLITICS</span><div class="fc-tip"><div class="ftt off">🏛️ POLITICS</div><div class="ftd">Elections, regulation, government spending, fiscal policy.</div><div class="fts off">○ DORMANT — Fiscal policy under debate</div></div></div><div class="fc off"><span class="fc-dot"></span>⚔️ <span class="fc-n">WAR</span><div class="fc-tip"><div class="ftt off">⚔️ WAR</div><div class="ftd">Active conflicts, sanctions, military escalations.</div><div class="fts off">○ DORMANT — No new escalation this session</div></div></div><div class="fc off"><span class="fc-dot"></span>💸 <span class="fc-n">DEBT</span><div class="fc-tip"><div class="ftt off">💸 DEBT</div><div class="ftd">Sovereign debt, deficit spending, bond market dynamics.</div><div class="fts off">○ DORMANT — Near-record Treasury issuance</div></div></div><div class="fc off"><span class="fc-dot"></span>💼 <span class="fc-n">JOBS</span><div class="fc-tip"><div class="ftt off">💼 JOBS</div><div class="ftd">Employment data, wage growth, labor market slack.</div><div class="fts off">○ DORMANT — Labor market data inline</div></div></div><div class="fc off"><span class="fc-dot"></span>🌾 <span class="fc-n">FOOD</span><div class="fc-tip"><div class="ftt off">🌾 FOOD</div><div class="ftd">Agricultural commodity prices and food inflation.</div><div class="fts off">○ DORMANT — Agricultural prices stable</div></div></div><div class="fc off"><span class="fc-dot"></span>🧑 <span class="fc-n">PEOPLE</span><div class="fc-tip"><div class="ftt off">🧑 PEOPLE</div><div class="ftd">Demographics, migration, social sentiment.</div><div class="fts off">○ DORMANT — No acute population shock</div></div></div></div></section>
 
 
-<!-- AGENT CONSENSUS -->
+<!-- AGENT CONSENSUS v8 — 4 AGENTS + CONVICTION + ALPHA -->
+
 <section class="glass-card rv" style="margin-bottom:24px">
-  <div class="sec-title">🤖 AGENT CONSENSUS</div>
-  <div class="agent-panel">
-    <div class="agent-card">
+  <div class="sec-title">🤖 AGENT CONSENSUS · 4-DESK WAR ROOM</div>
+  <div class="agent-panel-v8">
+    <div class="agent-card-v8">
       <div class="agent-name">🧠 Fundamental</div>
-      <div class="agent-bias neut">—</div>
+      <div class="agent-bias neut">NEUTRAL</div>
+      <div class="agent-conf-bar"><div class="agent-conf-fill" style="width:50%;background:var(--gold)"></div></div>
+      <div class="agent-conf">50% conviction</div>
+      <div class="agent-thesis">Parse error: Unterminated string in JSON at position 63 (line 1 column 64)</div>
     </div>
-    <div class="agent-card">
+    <div class="agent-card-v8">
       <div class="agent-name">📊 Technical</div>
-      <div class="agent-bias neut">—</div>
+      <div class="agent-bias neut">NEUTRAL</div>
+      <div class="agent-conf-bar"><div class="agent-conf-fill" style="width:50%;background:var(--gold)"></div></div>
+      <div class="agent-conf">50% conviction</div>
+      <div class="agent-thesis">Parse error: Unterminated string in JSON at position 70 (line 1 column 71)</div>
     </div>
-    <div class="agent-card">
+    <div class="agent-card-v8">
       <div class="agent-name">🎭 Sentiment</div>
-      <div class="agent-bias neut">—</div>
+      <div class="agent-bias neut">NEUTRAL</div>
+      <div class="agent-conf-bar"><div class="agent-conf-fill" style="width:50%;background:var(--gold)"></div></div>
+      <div class="agent-conf">50% conviction</div>
+      <div class="agent-thesis">Parse error: Unterminated string in JSON at position 73 (line 1 column 74)</div>
+    </div>
+    <div class="agent-card-v8 ">
+      <div class="agent-name">🛡️ Risk Manager</div>
+      <div class="agent-bias bull">RISK_ON</div>
+      <div class="agent-conf-bar"><div class="agent-conf-fill" style="width:50%;background:var(--green)"></div></div>
+      <div class="agent-conf">50% conviction</div>
+      <div class="agent-thesis">Risk agent error: URL parameter must be a string, got undefined</div>
+      
     </div>
   </div>
-  <div style="text-align:center">
+  <div style="text-align:center;margin-top:12px">
     <span class="debate-badge consensus">✓ UNANIMOUS</span>
+    
+    
   </div>
-  
 </section>
 <!-- CHAOS LINE -->
-<section class="chaos rv"><span class="chaos-tag"><span class="star">✦</span> THE CHAOS LINE</span><div class="chaos-text">&ldquo;The market speaks in contradictions.&rdquo;</div><div class="share-row"><button class="s-btn red" onclick="openShare()">↗ Share</button><a class="s-btn x" href="https://twitter.com/intent/tweet?text=%22The%20market%20speaks%20in%20contradictions.%22%20%E2%80%94%20Chaos%20Intelligence%0Ahttps%3A%2F%2Fchaos.sumanthworks.com" target="_blank" rel="noopener">𝕏 Post</a><a class="s-btn tg" href="https://t.me/share/url?url=https%3A%2F%2Fchaos.sumanthworks.com&text=%22The%20market%20speaks%20in%20contradictions.%22%20%E2%80%94%20Chaos%20Intelligence%0A%0ATUE%2C%20MAR%2031%2C%202026%20brief%3A%20https%3A%2F%2Fchaos.sumanthworks.com" target="_blank" rel="noopener">✈ Telegram</a><button class="s-btn ghost" onclick="copyLine()">📋 Copy</button><span class="copied-msg" id="copied-msg">✓ Copied!</span></div></section>
+<section class="chaos rv"><span class="chaos-tag"><span class="star">✦</span> THE CHAOS LINE</span><div class="chaos-text">&ldquo;The market speaks in contradictions.&rdquo;</div><div class="share-row"><button class="s-btn red" onclick="openShare()">↗ Share</button><a class="s-btn x" href="https://twitter.com/intent/tweet?text=%22The%20market%20speaks%20in%20contradictions.%22%20%E2%80%94%20Chaos%20Intelligence%0Ahttps%3A%2F%2Fchaos.sumanthworks.com" target="_blank" rel="noopener">𝕏 Post</a><a class="s-btn tg" href="https://t.me/share/url?url=https%3A%2F%2Fchaos.sumanthworks.com&text=%22The%20market%20speaks%20in%20contradictions.%22%20%E2%80%94%20Chaos%20Intelligence%0A%0AMON%2C%20APR%206%2C%202026%20brief%3A%20https%3A%2F%2Fchaos.sumanthworks.com" target="_blank" rel="noopener">✈ Telegram</a><button class="s-btn ghost" onclick="copyLine()">📋 Copy</button><span class="copied-msg" id="copied-msg">✓ Copied!</span></div></section>
 
 <!-- INLINE CTA (moved up from bottom!) -->
 <section class="inline-cta rv"><div class="cta-left"><div class="cta-title">3 trades. Before the bell. Zero guesswork. Miss the signal → chase the loss.</div><div class="cta-sub">PRIVATE CHANNEL · REAL-TIME ALERTS · FULL PLAYBOOK</div></div><a class="cta-btn" href="https://sumanth664.gumroad.com/l/hlpqa" target="_blank" rel="noopener">GET THE NEXT SIGNAL →</a></section>
@@ -431,7 +491,7 @@ body.light .hash-badge{background:rgba(0,180,90,.06);border-color:rgba(0,180,90,
 <section class="glass-card rv" style="margin-bottom:48px"><div class="sec-title">LAST 7 SIGNALS</div><div style="font-family:var(--font-mono);font-size:.8rem;color:var(--ink);line-height:1.8"><div style="display:flex;justify-content:space-between;border-bottom:1px solid var(--s3);padding:8px 0"><span style="color:var(--green)">✔ BTC Long</span><span style="color:var(--green)">+4.5%</span></div><div style="display:flex;justify-content:space-between;border-bottom:1px solid var(--s3);padding:8px 0"><span style="color:var(--green)">✔ Oil Trade</span><span style="color:var(--gold)">Running</span></div><div style="display:flex;justify-content:space-between;border-bottom:1px solid var(--s3);padding:8px 0"><span style="color:var(--red)">❌ SPX Short</span><span style="color:var(--red)">-1.2%</span></div><div style="display:flex;justify-content:space-between;padding-top:12px;font-size:1rem;font-weight:700;color:var(--ink)"><span>Win Rate:</span><span style="color:var(--green)">68%</span></div></div><div style="font-family:var(--font-mono);font-size:.42rem;color:var(--muted);margin-top:12px;padding:8px 12px;background:var(--s2);border-radius:6px;border-left:2px solid var(--gold);letter-spacing:.5px">⚠ Sample signals shown. Live performance tracking rolling out.</div></section>
 
 <!-- MACRO DASHBOARD -->
-<section class="glass-card rv" style="margin-bottom:48px"><div class="sec-title">MACRO DASHBOARD</div><div class="mgrid"><div class="mi" style="animation-delay:0ms"><div class="mi-l">10Y Treasury</div><div class="mi-v neut">4.342%</div><div class="mi-s">Yield change</div></div><div class="mi" style="animation-delay:80ms"><div class="mi-l">DXY Dollar</div><div class="mi-v neut">100.46</div><div class="mi-s">— Neutral</div></div><div class="mi" style="animation-delay:160ms"><div class="mi-l">VIX</div><div class="mi-v dn">30.61</div><div class="mi-s">Implied vol</div></div><div class="mi" style="animation-delay:240ms"><div class="mi-l">S&amp;P 500</div><div class="mi-v dn">6,344</div><div class="mi-s">-0.39%</div></div><div class="mi" style="animation-delay:320ms"><div class="mi-l">Recession Prob</div><div class="mi-v up">0.8%</div><div class="mi-s">FRED/NY Fed model</div></div><div class="mi" style="animation-delay:400ms"><div class="mi-l">BTC Dominance</div><div class="mi-v neut">56.2%</div><div class="mi-s">$2.40T</div></div><div class="mi" style="animation-delay:480ms"><div class="mi-l">Gold /oz</div><div class="mi-v up">N/A</div><div class="mi-s">Safe-haven demand</div></div><div class="mi" style="animation-delay:560ms"><div class="mi-l">WSB Sentiment</div><div class="mi-v neut">MIXED</div><div class="mi-s">Retail positioning</div></div></div></section>
+<section class="glass-card rv" style="margin-bottom:48px"><div class="sec-title">MACRO DASHBOARD</div><div class="mgrid"><div class="mi" style="animation-delay:0ms"><div class="mi-l">10Y Treasury</div><div class="mi-v neut">N/A%</div><div class="mi-s">Yield change</div></div><div class="mi" style="animation-delay:80ms"><div class="mi-l">DXY Dollar</div><div class="mi-v neut">99.94</div><div class="mi-s">— Neutral</div></div><div class="mi" style="animation-delay:160ms"><div class="mi-l">VIX</div><div class="mi-v dn">24.90</div><div class="mi-s">Implied vol</div></div><div class="mi" style="animation-delay:240ms"><div class="mi-l">S&amp;P 500</div><div class="mi-v up">6,583</div><div class="mi-s">+0.11%</div></div><div class="mi" style="animation-delay:320ms"><div class="mi-l">Recession Prob</div><div class="mi-v up">0.5%</div><div class="mi-s">FRED/NY Fed model</div></div><div class="mi" style="animation-delay:400ms"><div class="mi-l">BTC Dominance</div><div class="mi-v neut">56.5%</div><div class="mi-s">$2.44T</div></div><div class="mi" style="animation-delay:480ms"><div class="mi-l">Gold /oz</div><div class="mi-v up">N/A</div><div class="mi-s">Safe-haven demand</div></div><div class="mi" style="animation-delay:560ms"><div class="mi-l">WSB Sentiment</div><div class="mi-v neut">MIXED</div><div class="mi-s">Retail positioning</div></div></div></section>
 
 
 
@@ -446,7 +506,7 @@ body.light .hash-badge{background:rgba(0,180,90,.06);border-color:rgba(0,180,90,
 <section class="wires rv"><div class="wires-h"><span>INTEL WIRES</span><span style="font-size:.42rem;opacity:.5">CLICK TO EXPAND</span></div><div class="wire"><div class="wire-hl" style="color:var(--muted)">No wires this session.</div></div></section>
 
 <!-- CROSS-MARKET CONTEXT (DYNAMIC) -->
-<section class="ctx rv"><div class="sec-title">CROSS-MARKET CONTEXT</div><div class="ctx-grid"><div class="ctx-card" style="--accent:var(--red);animation-delay:0ms"><div class="ctx-l">Bond Market</div><div class="ctx-v dn">CAUTION</div><div class="ctx-d">10Y at 4.342% — bond market pricing fiscal risk.</div></div><div class="ctx-card" style="--accent:var(--green);animation-delay:100ms"><div class="ctx-l">Equity Market</div><div class="ctx-v up">CALM</div><div class="ctx-d">Equities holding. -0.39% session.</div></div><div class="ctx-card" style="--accent:var(--gold);animation-delay:200ms"><div class="ctx-l">Crypto</div><div class="ctx-v neut">HEDGING</div><div class="ctx-d">BTC at $67,612 — hard asset demand.</div></div><div class="ctx-card" style="--accent:var(--purple);animation-delay:300ms"><div class="ctx-l">Sentiment</div><div class="ctx-v up">FEAR 50</div><div class="ctx-d">Neutral sentiment across retail.</div></div></div></section>
+<section class="ctx rv"><div class="sec-title">CROSS-MARKET CONTEXT</div><div class="ctx-grid"><div class="ctx-card" style="--accent:var(--red);animation-delay:0ms"><div class="ctx-l">Bond Market</div><div class="ctx-v dn">CAUTION</div><div class="ctx-d">10Y at N/A% — bond market pricing fiscal risk.</div></div><div class="ctx-card" style="--accent:var(--green);animation-delay:100ms"><div class="ctx-l">Equity Market</div><div class="ctx-v up">CALM</div><div class="ctx-d">Equities holding. +0.11% session.</div></div><div class="ctx-card" style="--accent:var(--gold);animation-delay:200ms"><div class="ctx-l">Crypto</div><div class="ctx-v neut">HEDGING</div><div class="ctx-d">BTC at $69,169 — hard asset demand.</div></div><div class="ctx-card" style="--accent:var(--purple);animation-delay:300ms"><div class="ctx-l">Sentiment</div><div class="ctx-v up">FEAR 50</div><div class="ctx-d">Neutral sentiment across retail.</div></div></div></section>
 
 <!-- POLYMARKET -->
 <section class="poly rv"><span class="poly-tag">⚡ TOP PREDICTION MARKET</span><div class="poly-q">Unknown</div><div class="poly-row"><div class="poly-odds">50.0%</div><div class="poly-bar-w"><div class="poly-bar-l"><span>YES probability</span><span>24h tracked</span></div><div class="poly-track"><div class="poly-fill" id="poly-fill" style="width:0%"></div></div></div></div><div style="margin-top:14px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px"><div class="poly-meta">Volume: $0</div><a class="poly-link" href="https://polymarket.com" target="_blank" rel="noopener">VIEW LIVE →</a></div></section>
@@ -455,7 +515,7 @@ body.light .hash-badge{background:rgba(0,180,90,.06);border-color:rgba(0,180,90,
 
 <footer class="wrap"><div class="ftr"><div class="ftr-brand">CHAOS<em>.</em></div><div class="ftr-links"><a href="https://sumanth664.gumroad.com/l/hlpqa" class="ftr-link" target="_blank" rel="noopener">Telegram</a><a href="https://chaos.sumanthworks.com" class="ftr-link">Live Brief</a></div><div class="ftr-disc">Not financial advice. AI-generated from public data. © 2026 Chaos Intelligence · https://chaos.sumanthworks.com</div></div></footer>
 
-<div class="modal-bg" id="modal-bg" onclick="closeShareBg(event)"><div class="modal"><button class="modal-x" onclick="closeShare()">✕</button><div class="modal-tag">CHAOS INTELLIGENCE — SHARE</div><div class="modal-q">&ldquo;The market speaks in contradictions.&rdquo;</div><div class="modal-site">https://chaos.sumanthworks.com</div><div class="modal-btns"><a class="s-btn x" href="https://twitter.com/intent/tweet?text=%22The%20market%20speaks%20in%20contradictions.%22%20%E2%80%94%20Chaos%20Intelligence%0Ahttps%3A%2F%2Fchaos.sumanthworks.com" target="_blank" rel="noopener">𝕏 Twitter/X</a><a class="s-btn tg" href="https://t.me/share/url?url=https%3A%2F%2Fchaos.sumanthworks.com&text=%22The%20market%20speaks%20in%20contradictions.%22%20%E2%80%94%20Chaos%20Intelligence%0A%0ATUE%2C%20MAR%2031%2C%202026%20brief%3A%20https%3A%2F%2Fchaos.sumanthworks.com" target="_blank" rel="noopener">✈ Telegram</a><button class="s-btn ghost" onclick="copyModal()">📋 Copy</button></div></div></div>
+<div class="modal-bg" id="modal-bg" onclick="closeShareBg(event)"><div class="modal"><button class="modal-x" onclick="closeShare()">✕</button><div class="modal-tag">CHAOS INTELLIGENCE — SHARE</div><div class="modal-q">&ldquo;The market speaks in contradictions.&rdquo;</div><div class="modal-site">https://chaos.sumanthworks.com</div><div class="modal-btns"><a class="s-btn x" href="https://twitter.com/intent/tweet?text=%22The%20market%20speaks%20in%20contradictions.%22%20%E2%80%94%20Chaos%20Intelligence%0Ahttps%3A%2F%2Fchaos.sumanthworks.com" target="_blank" rel="noopener">𝕏 Twitter/X</a><a class="s-btn tg" href="https://t.me/share/url?url=https%3A%2F%2Fchaos.sumanthworks.com&text=%22The%20market%20speaks%20in%20contradictions.%22%20%E2%80%94%20Chaos%20Intelligence%0A%0AMON%2C%20APR%206%2C%202026%20brief%3A%20https%3A%2F%2Fchaos.sumanthworks.com" target="_blank" rel="noopener">✈ Telegram</a><button class="s-btn ghost" onclick="copyModal()">📋 Copy</button></div></div></div>
 
 <script>
 // Boot — fast 800ms
@@ -468,7 +528,7 @@ window.addEventListener('scroll',function(){var h=document.documentElement,b=doc
 (function(){var target=50,arc=document.getElementById('gauge-arc'),num=document.getElementById('gauge-num');if(!arc||!num)return;var total=251,offset=total-(target/100)*total;setTimeout(function(){arc.style.strokeDashoffset=offset;var c=0,step=Math.max(1,Math.round(target/40));var iv=setInterval(function(){c+=step;if(c>=target){c=target;clearInterval(iv)}num.textContent=c},25)},1200)})();
 
 // Tab switching
-function setCx(cx,btn){if(window.speechSynthesis)speechSynthesis.cancel();document.querySelectorAll('.voice-btn').forEach(function(b){b.classList.remove('playing');b.innerHTML='<span class="v-icon">🔊</span> LISTEN'});document.querySelectorAll('.cx-btn').forEach(function(b){b.classList.remove('active')});document.querySelectorAll('.pane').forEach(function(p){p.classList.remove('active')});btn.classList.add('active');document.getElementById('pane-'+cx).classList.add('active')}
+function setCx(cx,btn){_chaosStopAll();if(window.speechSynthesis)speechSynthesis.cancel();document.querySelectorAll('.voice-btn').forEach(function(b){b.classList.remove('playing');b.innerHTML='<span class="v-icon">🔊</span> LISTEN'});document.querySelectorAll('.cx-btn').forEach(function(b){b.classList.remove('active')});document.querySelectorAll('.pane').forEach(function(p){p.classList.remove('active')});btn.classList.add('active');document.getElementById('pane-'+cx).classList.add('active')}
 
 // Theme
 function toggleTheme(){var l=document.body.classList.toggle('light');document.getElementById('th-lbl').textContent=l?'LIGHT':'DARK';try{localStorage.setItem('chaos-theme',l?'light':'dark')}catch(e){}}
@@ -503,53 +563,104 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape')closeShare()
 (function(){var params=new URLSearchParams(window.location.search);if(params.get('debug')==='1'){document.querySelectorAll('.nuclear-badge,.brain-badge').forEach(function(el){el.style.display='inline'})}})();
 
 
-// ═══════════════ VOICE ENGINE + WORLD CLOCK + SESSION ═══════════════
+// ═══════════════ CHAOS VOICE ENGINE v7 — POLLINATIONS.AI TTS ═══════════════
+// Voices: ELI5=nova (warm), Analyst=echo (authoritative), Quant=onyx (deep)
+// API: https://text.pollinations.ai — 100% FREE, no key required
+// ═════════════════════════════════════════════════════════════════════════════
 
-// --- VOICE: Text-to-Speech for each intelligence level ---
+var CHAOS_VOICES = {'pane-eli5':'nova','pane-analyst':'echo','pane-quant':'onyx'};
+var _chaosAudio = null;
+var _chaosBtn = null;
+
+function _chaosStopAll() {
+  if (_chaosAudio) { try { _chaosAudio.pause(); _chaosAudio.currentTime = 0; } catch(e){} }
+  if (_chaosBtn) { _chaosBtn.classList.remove('playing'); _chaosBtn.innerHTML = '<span class="v-icon">🔊</span> LISTEN'; }
+  _chaosAudio = null; _chaosBtn = null;
+}
+
 function chaosSpeak(paneId, btn) {
-  if (!('speechSynthesis' in window)) {
-    btn.innerHTML = '<span class="v-icon">❌</span> N/A';
-    setTimeout(function(){ btn.innerHTML = '<span class="v-icon">🔊</span> LISTEN'; }, 1500);
-    return;
+  // Toggle off if same button playing
+  if (_chaosBtn === btn && _chaosAudio && !_chaosAudio.paused) {
+    _chaosStopAll(); return;
   }
-  // If already playing, stop
-  if (btn.classList.contains('playing')) {
-    speechSynthesis.cancel();
-    btn.classList.remove('playing');
-    btn.innerHTML = '<span class="v-icon">🔊</span> LISTEN';
-    return;
-  }
+  _chaosStopAll();
+
   var pane = document.getElementById(paneId);
   if (!pane) return;
   var brief = pane.querySelector('.brief');
   if (!brief) return;
-  // Clean text: strip metrics area, keep only prose
+
+  // Extract prose text only
   var text = '';
-  brief.querySelectorAll('p').forEach(function(p){ text += p.textContent + '. '; });
+  brief.querySelectorAll('p').forEach(function(p){ text += p.textContent + ' '; });
   if (!text.trim()) text = brief.textContent;
-  // Clean: remove ** and excessive whitespace
   text = text.replace(/**/g,'').replace(/s+/g,' ').trim();
+  // Limit to 2500 chars to keep TTS fast
+  if (text.length > 2500) text = text.substring(0, 2500) + '...';
   if (!text) return;
 
-  speechSynthesis.cancel();
-  var u = new SpeechSynthesisUtterance(text);
-  u.lang = 'en-US';
-  // Adjust speed per level
-  var rates = {'pane-eli5': 0.9, 'pane-analyst': 0.95, 'pane-quant': 1.05};
-  u.rate = rates[paneId] || 0.95;
-  u.pitch = 1;
-  u.volume = 0.9;
+  var voice = CHAOS_VOICES[paneId] || 'echo';
+  _chaosBtn = btn;
+  btn.classList.add('playing');
+  btn.innerHTML = '<span class="v-icon">⏳</span> LOADING...';
 
-  u.onstart = function(){ btn.classList.add('playing'); btn.innerHTML = '<span class="v-icon">⏸</span> PLAYING'; };
-  u.onend = function(){ btn.classList.remove('playing'); btn.innerHTML = '<span class="v-icon">🔊</span> LISTEN'; };
-  u.onerror = function(){ btn.classList.remove('playing'); btn.innerHTML = '<span class="v-icon">🔊</span> LISTEN'; };
-
-  speechSynthesis.speak(u);
+  // Call Pollinations.AI TTS — returns audio/mpeg stream
+  fetch('https://text.pollinations.ai/', {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({
+      messages: [{role:'user', content:text}],
+      model: 'openai-audio',
+      voice: voice,
+      seed: 42
+    })
+  })
+  .then(function(res) {
+    if (!res.ok) throw new Error('TTS API ' + res.status);
+    return res.blob();
+  })
+  .then(function(blob) {
+    var url = URL.createObjectURL(blob);
+    _chaosAudio = new Audio(url);
+    _chaosAudio.oncanplay = function() {
+      btn.innerHTML = '<span class="v-icon">⏸</span> PLAYING';
+    };
+    _chaosAudio.onended = function() {
+      btn.classList.remove('playing');
+      btn.innerHTML = '<span class="v-icon">🔊</span> LISTEN';
+      URL.revokeObjectURL(url);
+      _chaosAudio = null; _chaosBtn = null;
+    };
+    _chaosAudio.onerror = function() {
+      btn.classList.remove('playing');
+      btn.innerHTML = '<span class="v-icon">🔊</span> LISTEN';
+      _chaosAudio = null; _chaosBtn = null;
+    };
+    _chaosAudio.play().catch(function(e) {
+      console.warn('Chaos TTS play error:', e);
+      btn.classList.remove('playing');
+      btn.innerHTML = '<span class="v-icon">🔊</span> LISTEN';
+    });
+  })
+  .catch(function(e) {
+    console.warn('Pollinations TTS failed, using browser fallback:', e);
+    btn.classList.remove('playing');
+    btn.innerHTML = '<span class="v-icon">🔊</span> LISTEN';
+    _chaosBtn = null;
+    // Browser TTS fallback
+    if ('speechSynthesis' in window) {
+      var u = new SpeechSynthesisUtterance(text);
+      u.lang = 'en-US';
+      u.rate = {'pane-eli5':0.88,'pane-analyst':0.92,'pane-quant':1.0}[paneId] || 0.92;
+      u.pitch = 1; u.volume = 1;
+      speechSynthesis.cancel();
+      speechSynthesis.speak(u);
+    }
+  });
 }
 
-// Voice buttons are now embedded directly in the HTML template
-
-// Voice stop is handled by chaosSpeak toggle — no setCx override needed
+// Stop audio on tab switch
+window.addEventListener('beforeunload', _chaosStopAll);
 
 // --- WORLD CLOCK + SESSION INDICATOR + MARKET STATUS ---
 function updateWorldClock() {
@@ -597,8 +708,7 @@ function updateWorldClock() {
 updateWorldClock();
 setInterval(updateWorldClock, 15000);
 
-// Stop speech on page unload
-window.addEventListener('beforeunload', function(){ if(window.speechSynthesis) speechSynthesis.cancel(); });
+// Stop all audio on page unload (handled by _chaosStopAll above)
 
 </script>
 </body>
